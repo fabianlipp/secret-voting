@@ -1,0 +1,114 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Flask-SocketIO Test</title>
+    <script src="//code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function() {
+            // Use a "/test" namespace.
+            // An application can open a connection on multiple namespaces, and
+            // Socket.IO will multiplex all those connections on a single
+            // physical channel. If you don't care about multiple channels, you
+            // can set the namespace to an empty string.
+            namespace = '/test';
+
+            // Connect to the Socket.IO server.
+            // The connection URL has the following format, relative to the current page:
+            //     http[s]://<domain>:<port>[/<namespace>]
+            var socket = io(namespace);
+
+            // Event handler for new connections.
+            // The callback function is invoked when a connection with the
+            // server is established.
+            //socket.on('connect', function() {
+            //    socket.emit('my_event', {data: 'I\'m connected!'});
+            //});
+
+            socket.on('register_broadcast', function(msg) {
+                let list_contents = ""
+                for (name of msg.all_users) {
+                    list_contents += '<li>' + name + '</li>\n';
+                }
+                $("#list-of-users").html(list_contents);
+            });
+
+            socket.on('register_response', function(msg) {
+                if (msg.successful) {
+                    $('#register_success').html("You registered successfully");
+                    $("#voting_register :input").prop('disabled', true);
+                }
+            });
+
+            socket.on('reset_broadcast', function(msg) {
+                $("#list-of-users").html('');
+                $("#register_success").html('');
+                $("#your-token").html('');
+                $("#admin_output_tokens").html('');
+                $("#admin_output_names").html('');
+                $("#voting_register :input").prop('disabled', false);
+            });
+
+            socket.on('generated_token', function (msg) {
+                $('#your-token').html(msg.token);
+            });
+
+            socket.on('voting_end_response', function (msg) {
+                let list_contents = ""
+                for (name of msg.all_users) {
+                    list_contents += '<li>' + name + '</li>\n';
+                }
+                $("#admin_output_names").html(list_contents);
+                list_contents = ""
+                for (name of msg.all_tokens) {
+                    list_contents += '<li>' + name + '</li>\n';
+                }
+                $("#admin_output_tokens").html(list_contents);
+            });
+
+            // Handlers for the different forms in the page.
+            // These accept data from the user and send it to the server in a
+            // variety of ways
+            $('form#voting_register').submit(function(event) {
+                socket.emit('voting_register', {data: $('#register_name').val()});
+                return false;
+            });
+            $('form#voting_reset').submit(function(event) {
+                socket.emit('voting_reset', {});
+                return false;
+            });
+            $('form#voting_end').submit(function(event) {
+                socket.emit('voting_end', {});
+                return false;
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Flask-SocketIO Test</h1>
+    <p>Async mode is: <b>{{ async_mode }}</b></p>
+    <h2>Voting:</h2>
+    <form id="voting_register" method="POST" action='#'>
+        <input type="text" name="register_name" id="register_name" placeholder="Name">
+        <input type="submit" value="Register for voting">
+        <span id="register_success"></span>
+    </form>
+    <h3>Registered Users:</h3>
+    <ul id="list-of-users"></ul>
+
+    <h3>Your token:</h3>
+    <div id="your-token">Not generated yet.</div>
+
+    <h3>Voting Administration:</h3>
+    <form id="voting_reset" method="POST" action='#'>
+        <input type="submit" value="Reset">
+    </form>
+    <form id="voting_end" method="POST" action='#'>
+        <input type="submit" value="End and generate tokens">
+    </form>
+    Tokens:
+    <ul id="admin_output_tokens"></ul>
+    Names:
+    <ul id="admin_output_names"></ul>
+</body>
+</html>
