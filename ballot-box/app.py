@@ -2,7 +2,7 @@ import json
 from typing import List
 
 from flask import Flask, g, request, render_template
-from .db import my_session_scope, MyDatabase, MyDatabaseSession, Poll, Vote
+from db import my_session_scope, MyDatabase, MyDatabaseSession, Poll, Vote
 
 app = Flask(__name__)
 
