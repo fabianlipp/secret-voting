@@ -83,6 +83,11 @@ $(document).ready(function() {
             list_contents += '<li>' + name + '</li>\n';
         }
         $("#admin_output_tokens").html(list_contents);
+        json_output = {
+            "users": msg.all_users,
+            "tokens": msg.all_tokens
+        };
+        $("#admin_output_json").val(JSON.stringify(json_output));
     });
 
     // Handlers for the different forms in the page.

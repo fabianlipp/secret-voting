@@ -84,6 +84,8 @@ def admin_voting_reset(message):
     registration_active = True
     registered_fullnames.clear()
     generated_tokens.clear()
+    registered_userids.clear()
+    registered_sessionids.clear()
     emit('reset_broadcast',
          {},
          broadcast=True)
@@ -135,7 +137,7 @@ def admin_voting_end(message):
 
 @socketio.on('connect', namespace='/test')
 def connect():
-    global admins, registration_active, registered_fullnames
+    global admins, registration_active, registered_fullnames, registered_userids
     headers = dict(request.headers)
     if headers['X-Secret-Voting-Admin'] == "true":
         admins.append(request.sid)
