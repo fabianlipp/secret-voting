@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <p>Poll: {{ poll_label }}</p>
+
+    <form id="vote_submit" method="POST" action="/{{ poll_id }}/submit_vote">
+        <input type="text" name="token" value="Token">
+        {% for option in answer_options %}
+            <input type="radio" name="answer" value="{{ option.answer_id }}">{{ option.label }}
+        {% endfor %}
+        <input type="submit" value="Give Vote">
+        <span id="register_success"></span>
+    </form>
+</body>
+</html>

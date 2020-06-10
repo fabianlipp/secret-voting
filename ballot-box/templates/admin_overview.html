@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h3>New poll</h3>
+    <a href="/admin/new_poll">New poll</a>
+
+<h3>Active polls</h3>
+<ul>
+    {% for poll in active_polls %}
+        <li>
+            [{{ poll.poll_id }}]
+            {{ poll.label }}
+            <a href="/admin/close_poll/{{ poll.poll_id }}">Close Poll</a>
+        </li>
+    {% endfor %}
+</ul>
+
+<h3>Closed polls</h3>
+<ul>
+    {% for poll in closed_polls %}
+        <li>
+            <a href="/admin/poll_results/{{ poll.poll_id }}">
+                [{{ poll.poll_id }}]
+                {{ poll.label }}
+            </a>
+        </li>
+    {% endfor %}
+</ul>
+
+</body>
+</html>

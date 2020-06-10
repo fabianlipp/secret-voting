@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    Poll: {{ poll.label }} (ID: {{ poll.poll_id }})
+    <h3>Summarized results</h3>
+    <ul>
+    {% for option in answer_options %}
+        <li>{{ option.answer_id }} - {{ option.label }} - {{ option.count }}</li>
+
+    {% endfor %}
+    </ul>
+
+    <h3>Individual votes</h3>
+    <ul>
+    {% for vote in votes %}
+        <li>{{ vote.token }} - {{ vote.answer_id }} - {{ vote.answer_option.label }}</li>
+    {% endfor %}
+    </ul>
+</body>
+</html>

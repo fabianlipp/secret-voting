@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p>
+    {% if msg == "create_success" %}
+        Abstimmung erzeugt und aktiviert (ID {{ poll_id }}).
+    {% elif msg == "poll_closed" %}
+        Abstimmung geschlossen: ID {{ poll_id }}
+    {% else %}
+        Unbekannter Grund.
+    {% endif %}
+</p>
+</body>
+</html>

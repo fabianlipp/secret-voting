@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p>Poll: {{ poll_label }}</p>
+
+<p>
+{% if state == "not_active" %}
+    Abstimmung ist nicht aktiv.
+{% elif state == "token_invalid" %}
+    Dein Token wurde nicht erkannt.
+{% elif state == "successful" %}
+    Stimme wurde registriert.
+{% else %}
+    Unbekannter Grund.
+{% endif %}
+</p>
+</body>
+</html>
