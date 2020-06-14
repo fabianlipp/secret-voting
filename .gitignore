@@ -1,5 +1,7 @@
 /.idea/
 /__pycache__/
+/vote-registration/certs/*
+!/vote-registration/certs/README.md
 /vote-registration/settings.json
 /venv/
 

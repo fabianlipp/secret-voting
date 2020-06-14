@@ -1,0 +1,8 @@
+version: '3.7'
+
+services:
+  vote-registration:
+    build: ./vote-registration/.
+    command: gunicorn --bind 0.0.0.0:5000 app:app --worker-class eventlet
+    ports:
+      - 127.0.0.1:5000:5000
