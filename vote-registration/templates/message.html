@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p>Poll: {{ poll_label }}</p>
+
+<p>
+{% if msg == "not_authenticated" %}
+    SAML Login invalid.
+{% elif msg == "no_admin_permissions" %}
+    No admin permissions.
+{% else %}
+    Unbekannter Grund.
+{% endif %}
+</p>
+</body>
+</html>

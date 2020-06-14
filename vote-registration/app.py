@@ -19,7 +19,7 @@ async_mode = None
 
 app = Flask(__name__)
 #app.config['SECRET_KEY'] = 'secret!'
-app.config['SAML_CONFIG'] = os.path.dirname(os.path.abspath(__file__))
+SAML_CONFIG_DIRECTORY = os.path.dirname(os.path.abspath(__file__))
 socketio = SocketIO(app, async_mode=async_mode)
 #thread = None
 #thread_lock = Lock()
@@ -34,14 +34,17 @@ session_fullnames = {}
 registration_active = True
 login_sessions = {}
 
+
 class SamlReturnData:
     adminStatus = False
     presenterStatus = False
     userid = ""
     fullname = ""
 
+
 def init_saml_auth(req):
-    return OneLogin_Saml2_Auth(req, custom_base_path=app.config['SAML_CONFIG'])
+    return OneLogin_Saml2_Auth(req, custom_base_path=SAML_CONFIG_DIRECTORY)
+
 
 def prepare_flask_request(request):
     # If server is behind proxys or balancers use the HTTP_X_FORWARDED fields
@@ -56,14 +59,15 @@ def prepare_flask_request(request):
         'query_string': request.query_string
     }
 
+
 @app.route('/', methods=['GET'])
 def sso():
     req = prepare_flask_request(request)
     auth = init_saml_auth(req)
     if auth.get_settings().get_security_data().get('localMode', False):
-       return render_template('local.html') 
-
+        return render_template('local.html', RelayState="")
     return redirect(auth.login())
+
 
 @app.route('/', methods=['POST'])
 def acs():
@@ -74,22 +78,20 @@ def acs():
     saml_return_data = SamlReturnData()
 
     if auth.get_settings().get_security_data().get('localMode', False):
+        # Local Mode is active, do not check SAML login data
         saml_return_data.fullname = request.form.get('fullname')
         saml_return_data.userid = request.form.get('userid')
         saml_return_data.adminStatus = request.form.get('is_admin')
         saml_return_data.presenterStatus = request.form.get('is_presenter')
-
-    else:    
+    else:
         auth.process_response()
         errors = auth.get_errors()
 
         if not auth.is_authenticated() or len(errors) > 0:
             # no proper login
-            # TODO error message
-            return "Login error"
+            return render_template("message.html", msg="not_authenticated")
 
         attributes = auth.get_attributes()
-
         saml_return_data.fullname = attributes['fullname']
         saml_return_data.userid = attributes['userid']
         saml_return_data.adminStatus = attributes.get('is_admin', False)
@@ -99,11 +101,8 @@ def acs():
 
     if 'RelayState' in request.form and request.form['RelayState'] == 'admin':
         if not saml_return_data.adminStatus:
-            # TODO error messag
-            return "Access denied"
-
+            return render_template("message.html", msg="no_admin_permissions")
         return render_template('admin.html', async_mode=socketio.async_mode, token=token)
-
     else:
         return render_template('index.html', async_mode=socketio.async_mode, token=token)
 
@@ -112,6 +111,8 @@ def acs():
 def admin():
     req = prepare_flask_request(request)
     auth = init_saml_auth(req)
+    if auth.get_settings().get_security_data().get('localMode', False):
+        return render_template('local.html', RelayState='admin')
     return redirect(auth.login('admin'))
 
 
@@ -189,6 +190,7 @@ def admin_voting_reset(message):
         return
     registration_active = True
     registered_fullnames.clear()
+    registered_userids.clear()
     generated_tokens.clear()
     emit('reset_broadcast',
          {},
@@ -274,7 +276,6 @@ def connect():
 #    print('Client disconnected', request.sid)
 
 
-# TODO: Not used
 def generate_token():
     letters_and_digits = string.ascii_letters + string.digits
     return ''.join(random.choice(letters_and_digits) for _ in range(50))
