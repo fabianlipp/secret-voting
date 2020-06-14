@@ -1,7 +1,7 @@
 FROM python:alpine3.7
 COPY requirements.txt /
-RUN apk add --no-cache openssl-dev libxml2-dev xmlsec-dev \
- && apk add --no-cache --virtual .build-deps gcc musl-dev libffi-dev \
+RUN apk add --no-cache libxml2-dev xmlsec-dev \
+ && apk add --no-cache --virtual .build-deps gcc musl-dev libffi-dev openssl-dev \
  && pip install -r /requirements.txt \
  && pip install gunicorn \
  && apk del .build-deps

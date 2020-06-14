@@ -5,7 +5,7 @@ RUN apk add --no-cache --virtual .build-deps gcc musl-dev libffi-dev openssl-dev
  && pip install pymysql \
  && pip install gunicorn \
  && apk del .build-deps
-COPY ballot-box /app
+COPY . /app
 WORKDIR /app
 EXPOSE 80
 CMD gunicorn -w2 --bind=0.0.0.0:80 app:app
