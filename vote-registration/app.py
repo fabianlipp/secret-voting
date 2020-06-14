@@ -99,7 +99,6 @@ def acs():
 def admin():
     req = prepare_flask_request(request)
     auth = init_saml_auth(req)
-    #return redirect(auth.login(request.url))
     return redirect(auth.login('admin'))
 
 
@@ -107,6 +106,20 @@ def admin():
 def presenter():
     # TODO: Access control (needed?)
     return render_template('presenter.html', async_mode=socketio.async_mode)
+
+
+@app.route('/slo')
+def slo():
+    req = prepare_flask_request(request)
+    auth = init_saml_auth(req)
+    return redirect(auth.logout())
+
+
+@app.route('/sls')
+def sls():
+    req = prepare_flask_request(request)
+    auth = init_saml_auth(req)
+    return redirect(auth.process_slo())
 
 
 @app.route('/metadata')
@@ -124,8 +137,6 @@ def metadata():
     resp.headers['Content-Type'] = 'text/xml'
     return resp
 
-
-# TODO SAML SLS 
 
 @app.route('/static/secret-voting.js')
 def send_js():
