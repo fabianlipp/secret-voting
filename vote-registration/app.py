@@ -5,7 +5,7 @@ import random
 import string
 from threading import Lock
 
-from flask import Flask, redirect, render_template, request, session
+from flask import Flask, make_response, redirect, render_template, request, session
 from flask_socketio import SocketIO, emit, join_room, close_room, disconnect
 
 from urllib.parse import urlparse
@@ -96,7 +96,7 @@ def acs():
 
 
 @app.route('/admin', methods=['GET'])
-def admin_get():
+def admin():
     req = prepare_flask_request(request)
     auth = init_saml_auth(req)
     #return redirect(auth.login(request.url))
@@ -107,6 +107,22 @@ def admin_get():
 def presenter():
     # TODO: Access control (needed?)
     return render_template('presenter.html', async_mode=socketio.async_mode)
+
+
+@app.route('/metadata')
+def metadata():
+    req = prepare_flask_request(request)
+    auth = init_saml_auth(req)
+    settings = auth.get_settings()
+    metadata = settings.get_sp_metadata()
+    errors = settings.validate_metadata(metadata)
+
+    if len(errors) > 0:
+        return make_response(', '.join(errors), 500)
+
+    resp = make_response(metadata, 200)
+    resp.headers['Content-Type'] = 'text/xml'
+    return resp
 
 
 # TODO SAML SLS 
