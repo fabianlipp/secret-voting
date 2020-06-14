@@ -87,10 +87,41 @@ def acs():
     return render_template('index.html', async_mode=socketio.async_mode, token=token)
 
 
-@app.route('/admin')
-def admin():
-    # TODO: Access control
-    return render_template('admin.html', async_mode=socketio.async_mode)
+@app.route('/admin', methods=['GET'])
+def admin_get():
+    req = prepare_flask_request(request)
+    auth = init_saml_auth(req)
+    return_to = '%sadmin' % request.host_url
+    return redirect(auth.login(return_to))
+
+@app.route('/admin', methods=['POST'])
+def admin_post():
+    req = prepare_flask_request(request)
+    auth = init_saml_auth(req)
+    auth.process_response()
+    errors = auth.get_errors()
+
+    if not auth.is_authenticated() or len(errors) > 0:
+        # no proper login
+        # TODO error message
+        return "Login error"
+
+    attributes = auth.get_attributes()
+    token = generate_token()
+
+    saml_return_data = SamlReturnData()
+    saml_return_data.fullname = attributes['fullname']
+    saml_return_data.userid = attributes['userid']
+    saml_return_data.adminStatus = attributes['is_admin']
+    saml_return_data.presenterStatus = attributes['is_presenter']
+
+    if not saml_return_data.adminStatus:
+        # no admin rights
+        # TODO error message
+        return "Access denied"
+
+    login_sessions[token] = saml_return_data
+    return render_template('admin.html', async_mode=socketio.async_mode, token=token)
 
 
 @app.route('/presenter')
