@@ -1,11 +1,16 @@
 #!/usr/bin/env python
 
+import os 
 import random
 import string
 from threading import Lock
 
-from flask import Flask, render_template, request, session
+from flask import Flask, redirect, render_template, request, session
 from flask_socketio import SocketIO, emit, join_room, close_room, disconnect
+
+from urllib.parse import urlparse
+from onelogin.saml2.auth import OneLogin_Saml2_Auth
+from onelogin.saml2.utils import OneLogin_Saml2_Utils
 
 # Set this variable to "threading", "eventlet" or "gevent" to test the
 # different async modes, or leave it set to None for the application to choose
@@ -14,6 +19,7 @@ async_mode = None
 
 app = Flask(__name__)
 #app.config['SECRET_KEY'] = 'secret!'
+app.config['SAML_CONFIG'] = os.path.dirname(os.path.abspath(__file__))
 socketio = SocketIO(app, async_mode=async_mode)
 #thread = None
 #thread_lock = Lock()
@@ -26,11 +32,59 @@ admins = []
 session_userids = {}
 session_fullnames = {}
 registration_active = True
+login_sessions = {}
 
+class SamlReturnData:
+    adminStatus = False
+    presenterStatus = False
+    userid = ""
+    fullname = ""
 
-@app.route('/')
-def index():
-    return render_template('index.html', async_mode=socketio.async_mode)
+def init_saml_auth(req):
+    return OneLogin_Saml2_Auth(req, custom_base_path=app.config['SAML_CONFIG'])
+
+def prepare_flask_request(request):
+    # If server is behind proxys or balancers use the HTTP_X_FORWARDED fields
+    url_data = urlparse(request.url)
+    return {
+        'https': 'on' if request.scheme == 'https' else 'off',
+        'http_host': request.host,
+        'server_port': url_data.port,
+        'script_name': request.path,
+        'get_data': request.args.copy(),
+        'post_data': request.form.copy(),
+        'query_string': request.query_string
+    }
+
+@app.route('/', methods=['GET'])
+def sso():
+    req = prepare_flask_request(request)
+    auth = init_saml_auth(req) 
+    return redirect(auth.login())
+
+@app.route('/', methods=['POST'])
+def acs():
+    req = prepare_flask_request(request)
+    auth = init_saml_auth(req)
+    auth.process_response()
+    errors = auth.get_errors()
+
+    if not auth.is_authenticated() or len(errors) > 0:
+        # no proper login
+        # TODO error message
+        return "Login error"
+
+    attributes = auth.get_attributes()
+    token = generate_token()
+
+    saml_return_data = SamlReturnData()
+    saml_return_data.fullname = attributes['fullname']
+    saml_return_data.userid = attributes['userid']
+    saml_return_data.adminStatus = attributes['is_admin']
+    saml_return_data.presenterStatus = attributes['is_presenter']
+
+    login_sessions[token] = saml_return_data
+    return render_template('index.html', async_mode=socketio.async_mode, token=token)
 
 
 @app.route('/admin')
@@ -44,6 +98,7 @@ def presenter():
     # TODO: Access control (needed?)
     return render_template('presenter.html', async_mode=socketio.async_mode)
 
+# TODO SAML SLS 
 
 @app.route('/static/secret-voting.js')
 def send_js():
@@ -84,8 +139,6 @@ def admin_voting_reset(message):
     registration_active = True
     registered_fullnames.clear()
     generated_tokens.clear()
-    registered_userids.clear()
-    registered_sessionids.clear()
     emit('reset_broadcast',
          {},
          broadcast=True)
@@ -137,15 +190,17 @@ def admin_voting_end(message):
 
 @socketio.on('connect', namespace='/test')
 def connect():
-    global admins, registration_active, registered_fullnames, registered_userids
-    headers = dict(request.headers)
-    if headers['X-Secret-Voting-Admin'] == "true":
+    global admins, registration_active, registered_fullnames
+    token = request.args.get('token')
+    saml_return_data: SamlReturnData = login_sessions[token]
+    del login_sessions[token]
+    if saml_return_data.adminStatus:
         admins.append(request.sid)
         admin_state = True
     else:
         admin_state = False
-    userid = headers['X-Secret-Voting-Id']
-    fullname = headers['X-Secret-Voting-Fullname']
+    userid = saml_return_data.userid
+    fullname = saml_return_data.fullname
     session_userids[request.sid] = userid
     session_fullnames[request.sid] = fullname
     if userid in registered_userids:
