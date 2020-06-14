@@ -29,6 +29,12 @@ You can watch three different views:
 
 t.b.d
 
+# Development
+
+## Local Mode
+
+By setting `security` / `localMode` `true` in `settings.json` you can bypass the SAML login to test your changes locally.
+
 ## Details
 
 This script is based on the example code by Flask-SocketIO (https://github.com/miguelgrinberg/Flask-SocketIO).

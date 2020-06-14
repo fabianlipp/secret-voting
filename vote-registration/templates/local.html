@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Secret Voting</title>
+</head>
+<body>
+    <h1>Secret Voting &ndash; Local Mode</h1>
+    <form id="local-user" method="POST" action='/'>
+	<input type="text" name="fullname" placeholder="Fullname"><br>
+	<input type="text" name="userid" placeholder="UserID"><br>
+	<input type="checkbox" name="is_admin"> is admin | show admin <input type="checkbox" name="RelayState" value="admin"><br>
+	<input type="checkbox" name="is_presenter"> is presenter<br>
+        <input type="submit" value="Join with this user">
+        <span id="register_success"></span>
+    </form>
+</body>
+</html>

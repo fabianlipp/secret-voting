@@ -59,29 +59,42 @@ def prepare_flask_request(request):
 @app.route('/', methods=['GET'])
 def sso():
     req = prepare_flask_request(request)
-    auth = init_saml_auth(req) 
+    auth = init_saml_auth(req)
+    if auth.get_settings().get_security_data().get('localMode', False):
+       return render_template('local.html') 
+
     return redirect(auth.login())
 
 @app.route('/', methods=['POST'])
 def acs():
     req = prepare_flask_request(request)
     auth = init_saml_auth(req)
-    auth.process_response()
-    errors = auth.get_errors()
 
-    if not auth.is_authenticated() or len(errors) > 0:
-        # no proper login
-        # TODO error message
-        return "Login error"
-
-    attributes = auth.get_attributes()
     token = generate_token()
-
     saml_return_data = SamlReturnData()
-    saml_return_data.fullname = attributes['fullname']
-    saml_return_data.userid = attributes['userid']
-    saml_return_data.adminStatus = attributes.get('is_admin', False)
-    saml_return_data.presenterStatus = attributes.get('is_presenter', False)
+
+    if auth.get_settings().get_security_data().get('localMode', False):
+        saml_return_data.fullname = request.form.get('fullname')
+        saml_return_data.userid = request.form.get('userid')
+        saml_return_data.adminStatus = request.form.get('is_admin')
+        saml_return_data.presenterStatus = request.form.get('is_presenter')
+
+    else:    
+        auth.process_response()
+        errors = auth.get_errors()
+
+        if not auth.is_authenticated() or len(errors) > 0:
+            # no proper login
+            # TODO error message
+            return "Login error"
+
+        attributes = auth.get_attributes()
+
+        saml_return_data.fullname = attributes['fullname']
+        saml_return_data.userid = attributes['userid']
+        saml_return_data.adminStatus = attributes.get('is_admin', False)
+        saml_return_data.presenterStatus = attributes.get('is_presenter', False)
+
     login_sessions[token] = saml_return_data
 
     if 'RelayState' in request.form and request.form['RelayState'] == 'admin':

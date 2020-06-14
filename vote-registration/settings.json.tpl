@@ -28,6 +28,7 @@
         "x509cert": ""
     },
     "security": {
+        "localMode": false,
         "nameIdEncrypted": false,
         "authnRequestsSigned": false,
         "logoutRequestSigned": false,
