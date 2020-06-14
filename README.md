@@ -1,8 +1,7 @@
-This script is based on the example code by Flask-SocketIO (https://github.com/miguelgrinberg/Flask-SocketIO).
-
 ## Setup
 
 ```
+git clone https://github.com/fabianlipp/secret-voting/
 cd secret-voting
 docker-compose build --no-cache && docker-compose up -d
 ```
@@ -23,6 +22,8 @@ You can watch three different views:
 
 
 ## Details
+
+This script is based on the example code by Flask-SocketIO (https://github.com/miguelgrinberg/Flask-SocketIO).
 
 socket.io rooms:
 - Session IDs
