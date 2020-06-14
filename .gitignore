@@ -1,4 +1,8 @@
 /.idea/
 /__pycache__/
+/docker-compose.yml
+/vote-registration/certs/*
+!/vote-registration/certs/README.md
+/vote-registration/settings.json
 /venv/
 

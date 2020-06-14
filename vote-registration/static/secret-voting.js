@@ -9,7 +9,7 @@ $(document).ready(function() {
     // Connect to the Socket.IO server.
     // The connection URL has the following format, relative to the current page:
     //     http[s]://<domain>:<port>[/<namespace>]
-    var socket = io(namespace);
+    var socket = io(namespace, {query: "token=" + secret_voting_token});
 
     // Event handler for new connections.
     // The callback function is invoked when a connection with the
