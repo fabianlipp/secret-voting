@@ -80,8 +80,8 @@ def acs():
     saml_return_data = SamlReturnData()
     saml_return_data.fullname = attributes['fullname']
     saml_return_data.userid = attributes['userid']
-    saml_return_data.adminStatus = attributes['is_admin']
-    saml_return_data.presenterStatus = attributes['is_presenter']
+    saml_return_data.adminStatus = attributes.get('is_admin', False)
+    saml_return_data.presenterStatus = attributes.get('is_presenter', False)
     login_sessions[token] = saml_return_data
 
     if 'RelayState' in request.form and request.form['RelayState'] == 'admin':
