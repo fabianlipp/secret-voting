@@ -3,8 +3,8 @@
 ```
 git clone https://github.com/fabianlipp/secret-voting/
 cd secret-voting
-cp docker-compose.yml{,.tpl}
-cp vote-registration/settings.json{,.tpl}
+cp docker-compose.yml{.tpl,}
+cp vote-registration/settings.json{.tpl,}
 # edit settings
 docker-compose build && docker-compose up -d
 ```
