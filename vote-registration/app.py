@@ -1,14 +1,13 @@
 #!/usr/bin/env python
 
-import os 
+import os
 import random
 import string
 from threading import Lock
+from urllib.parse import urlparse
 
 from flask import Flask, make_response, redirect, render_template, request, session
 from flask_socketio import SocketIO, emit, join_room, close_room, disconnect
-
-from urllib.parse import urlparse
 from onelogin.saml2.auth import OneLogin_Saml2_Auth
 from onelogin.saml2.utils import OneLogin_Saml2_Utils
 
@@ -18,20 +17,12 @@ from onelogin.saml2.utils import OneLogin_Saml2_Utils
 async_mode = None
 
 app = Flask(__name__)
-#app.config['SECRET_KEY'] = 'secret!'
 SAML_CONFIG_DIRECTORY = os.path.dirname(os.path.abspath(__file__))
 socketio = SocketIO(app, async_mode=async_mode)
-#thread = None
-#thread_lock = Lock()
 
-registered_fullnames = []
-registered_userids = []
-registered_sessionids = []
-generated_tokens = []
 admins = []
 session_userids = {}
 session_fullnames = {}
-registration_active = True
 login_sessions = {}
 
 
@@ -42,21 +33,32 @@ class SamlReturnData:
     fullname = ""
 
 
+class VoteRegistrationData:
+    registration_active = True
+    registered_fullnames = []
+    registered_userids = []
+    registered_sessionids = []
+
+
+vote_registration_data: VoteRegistrationData = VoteRegistrationData()
+vote_registration_lock = Lock()
+
+
 def init_saml_auth(req):
     return OneLogin_Saml2_Auth(req, custom_base_path=SAML_CONFIG_DIRECTORY)
 
 
-def prepare_flask_request(request):
+def prepare_flask_request(request_data):
     # If server is behind proxys or balancers use the HTTP_X_FORWARDED fields
-    url_data = urlparse(request.url)
+    url_data = urlparse(request_data.url)
     return {
-        'https': 'on' if request.scheme == 'https' else 'off',
-        'http_host': request.host,
+        'https': 'on' if request_data.scheme == 'https' else 'off',
+        'http_host': request_data.host,
         'server_port': url_data.port,
-        'script_name': request.path,
-        'get_data': request.args.copy(),
-        'post_data': request.form.copy(),
-        'query_string': request.query_string
+        'script_name': request_data.path,
+        'get_data': request_data.args.copy(),
+        'post_data': request_data.form.copy(),
+        'query_string': request_data.query_string
     }
 
 
@@ -77,7 +79,8 @@ def acs():
     token = generate_token()
     saml_return_data = SamlReturnData()
 
-    if auth.get_settings().get_security_data().get('localMode', False):
+    local_mode = auth.get_settings().get_security_data().get('localMode', False)
+    if local_mode:
         # Local Mode is active, do not check SAML login data
         saml_return_data.fullname = request.form.get('fullname')
         saml_return_data.userid = request.form.get('userid')
@@ -102,9 +105,9 @@ def acs():
     if 'RelayState' in request.form and request.form['RelayState'] == 'admin':
         if not saml_return_data.adminStatus:
             return render_template("message.html", msg="no_admin_permissions")
-        return render_template('admin.html', async_mode=socketio.async_mode, token=token)
+        return render_template('admin.html', async_mode=socketio.async_mode, token=token, local_mode=local_mode)
     else:
-        return render_template('index.html', async_mode=socketio.async_mode, token=token)
+        return render_template('index.html', async_mode=socketio.async_mode, token=token, local_mode=local_mode)
 
 
 @app.route('/admin', methods=['GET'])
@@ -141,13 +144,13 @@ def metadata():
     req = prepare_flask_request(request)
     auth = init_saml_auth(req)
     settings = auth.get_settings()
-    metadata = settings.get_sp_metadata()
-    errors = settings.validate_metadata(metadata)
+    sp_metadata = settings.get_sp_metadata()
+    errors = settings.validate_metadata(sp_metadata)
 
     if len(errors) > 0:
         return make_response(', '.join(errors), 500)
 
-    resp = make_response(metadata, 200)
+    resp = make_response(sp_metadata, 200)
     resp.headers['Content-Type'] = 'text/xml'
     return resp
 
@@ -159,39 +162,41 @@ def send_js():
 
 @socketio.on('voting_register', namespace='/test')
 def voting_register(message):
-    global registration_active
-    if not registration_active:
-        return
-    fullname = session_fullnames[request.sid]
-    userid = session_userids[request.sid]
-    if userid in registered_userids:
+    if not vote_registration_data.registration_active:
         emit('register_response',
              {'successful': False})
         return
-    registered_fullnames.append(fullname)
-    registered_userids.append(userid)
-    registered_sessionids.append(request.sid)
-    registered_sessionids.sort()
-    del session_userids[request.sid]
-    del session_fullnames[request.sid]
+    fullname = session_fullnames[request.sid]
+    userid = session_userids[request.sid]
+    with vote_registration_lock:
+        if userid in vote_registration_data.registered_userids:
+            emit('register_response',
+                 {'successful': False})
+            return
+        vote_registration_data.registered_fullnames.append(fullname)
+        vote_registration_data.registered_userids.append(userid)
+        vote_registration_data.registered_sessionids.append(request.sid)
+        vote_registration_data.registered_sessionids.sort()
+        del session_userids[request.sid]
+        del session_fullnames[request.sid]
     emit('register_response',
          {'successful': True})
     emit('register_broadcast',
          {'name': fullname,
-          'registered_fullnames': registered_fullnames},
+          'registered_fullnames': vote_registration_data.registered_fullnames},
          broadcast=True)
 
 
 # TODO: Check admin permissions in these calls
 @socketio.on('admin_voting_reset', namespace='/test')
 def admin_voting_reset(message):
-    global registration_active, admins
     if request.sid not in admins:
         return
-    registration_active = True
-    registered_fullnames.clear()
-    registered_userids.clear()
-    generated_tokens.clear()
+    with vote_registration_lock:
+        vote_registration_data.registration_active = True
+        vote_registration_data.registered_fullnames.clear()
+        vote_registration_data.registered_userids.clear()
+        vote_registration_data.registered_sessionids.clear()
     emit('reset_broadcast',
          {},
          broadcast=True)
@@ -199,35 +204,36 @@ def admin_voting_reset(message):
 
 @socketio.on('admin_voting_end', namespace='/test')
 def admin_voting_end(message):
-    global registration_active, admins
     if request.sid not in admins:
         return
-    if not registration_active:
+    if not vote_registration_data.registration_active:
         return
-    registration_active = False
     emit('voting_end_broadcast',
          {},
          broadcast=True)
-    for sid in registered_sessionids:
-        token = generate_display_token()
-        generated_tokens.append(token)
-        generated_tokens.sort()
-        emit('generated_token',
-             {'token': token},
-             room=sid)
-        close_room(sid)
-        disconnect(sid=sid)
-    registered_sessionids.clear()
+    with vote_registration_lock:
+        vote_registration_data.registration_active = False
+        generated_tokens = []
+        for sid in vote_registration_data.registered_sessionids:
+            token = generate_display_token()
+            generated_tokens.append(token)
+            generated_tokens.sort()
+            emit('generated_token',
+                 {'token': token},
+                 room=sid)
+            close_room(sid)
+            disconnect(sid=sid)
+        vote_registration_data.registered_sessionids.clear()
     # TODO: Close all non-admin/non-presenter sessions?
     # TODO: Following is admin only -> admin rooom
     emit('voting_end_response',
-         {'all_users': registered_fullnames,
+         {'all_users': vote_registration_data.registered_fullnames,
           'all_tokens': generated_tokens})
 
 
 # TODO: Do we need to handle disconnect?
-#@socketio.on('disconnect_request', namespace='/test')
-#def disconnect_request():
+# @socketio.on('disconnect_request', namespace='/test')
+# def disconnect_request():
 #    @copy_current_request_context
 #    def can_disconnect():
 #        disconnect()
@@ -243,7 +249,7 @@ def admin_voting_end(message):
 
 @socketio.on('connect', namespace='/test')
 def connect():
-    global admins, registration_active, registered_fullnames
+    global admins
     token = request.args.get('token')
     saml_return_data: SamlReturnData = login_sessions[token]
     del login_sessions[token]
@@ -256,23 +262,23 @@ def connect():
     fullname = saml_return_data.fullname
     session_userids[request.sid] = userid
     session_fullnames[request.sid] = fullname
-    if userid in registered_userids:
-        already_registered = True
-    else:
-        already_registered = False
-    emit('initial_status',
-         {'registration_active': registration_active,
-          'registered_fullnames': registered_fullnames,
-          'already_registered': already_registered,
-          'fullname': fullname,
-          'admin_state': admin_state})
-    print("Connected")
+    with vote_registration_lock:
+        if userid in vote_registration_data.registered_userids:
+            already_registered = True
+        else:
+            already_registered = False
+        emit('initial_status',
+             {'registration_active': vote_registration_data.registration_active,
+              'registered_fullnames': vote_registration_data.registered_fullnames,
+              'already_registered': already_registered,
+              'fullname': fullname,
+              'admin_state': admin_state})
 
 
 # TODO: We could remove the user from the lists here, if we didn't remove the session-user mapping before
 #  This would allow re-registration after a disconnect
-#@socketio.on('disconnect', namespace='/test')
-#def test_disconnect():
+# @socketio.on('disconnect', namespace='/test')
+# def test_disconnect():
 #    print('Client disconnected', request.sid)
 
 
