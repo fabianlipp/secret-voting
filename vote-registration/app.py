@@ -34,10 +34,11 @@ class SamlReturnData:
 
 
 class VoteRegistrationData:
-    registration_active = True
+    registration_active = False
     registered_fullnames = []
     registered_userids = []
     registered_sessionids = []
+    voting_link = ""
 
 
 vote_registration_data: VoteRegistrationData = VoteRegistrationData()
@@ -187,7 +188,6 @@ def voting_register(message):
          broadcast=True)
 
 
-# TODO: Check admin permissions in these calls
 @socketio.on('admin_voting_reset', namespace='/test')
 def admin_voting_reset(message):
     if request.sid not in admins:
@@ -197,6 +197,21 @@ def admin_voting_reset(message):
         vote_registration_data.registered_fullnames.clear()
         vote_registration_data.registered_userids.clear()
         vote_registration_data.registered_sessionids.clear()
+    emit('reset_broadcast',
+         {},
+         broadcast=True)
+
+
+@socketio.on('admin_voting_start', namespace='/test')
+def admin_voting_start(message):
+    if request.sid not in admins:
+        return
+    with vote_registration_lock:
+        vote_registration_data.registration_active = True
+        vote_registration_data.registered_fullnames.clear()
+        vote_registration_data.registered_userids.clear()
+        vote_registration_data.registered_sessionids.clear()
+        vote_registration_data.voting_link = message['voting_link']
     emit('reset_broadcast',
          {},
          broadcast=True)
@@ -219,7 +234,8 @@ def admin_voting_end(message):
             generated_tokens.append(token)
             generated_tokens.sort()
             emit('generated_token',
-                 {'token': token},
+                 {'token': token,
+                  'voting_link': vote_registration_data.voting_link},
                  room=sid)
             close_room(sid)
             disconnect(sid=sid)

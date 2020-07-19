@@ -48,10 +48,11 @@ $(document).ready(function() {
 
     socket.on('generated_token', function (msg) {
         $('#your-token').html(msg.token);
+        $('#voting-link').html(msg.voting_link);
     });
 
     socket.on('initial_status', function (msg) {
-        updateListOfUsers(msg.registered_fullnames)
+        updateListOfUsers(msg.registered_fullnames);
 
         setState(msg.registration_active);
         if (msg.registration_active && !msg.already_registered) {
@@ -101,8 +102,8 @@ $(document).ready(function() {
     });
 
     // Admin controls
-    $('form#voting_reset').submit(function(event) {
-        socket.emit('admin_voting_reset', {});
+    $('form#voting_start').submit(function(event) {
+        socket.emit('admin_voting_start', {'voting_link': $("input#voting-link").val()});
         return false;
     });
     $('form#voting_end').submit(function(event) {
@@ -121,6 +122,8 @@ function setState(registrationActive) {
 
 function setControlState(registrationDisabled) {
     $("#voting_register :input").prop('disabled', registrationDisabled);
+    $("#voting_start :input").prop('disabled', !registrationDisabled);
+    $("#voting_end :input").prop('disabled', registrationDisabled);
 }
 
 function updateListOfUsers(all_users) {
