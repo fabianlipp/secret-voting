@@ -1,9 +1,10 @@
+import enum
 from contextlib import contextmanager
 from sqlite3 import Connection as SQLite3Connection
 from typing import List
 
 import sqlalchemy.engine
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, event, create_engine, func
+from sqlalchemy import Column, Integer, String, ForeignKey, event, create_engine, func, Enum
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship, Session, Query
 from sqlalchemy.sql.expression import literal_column
@@ -11,10 +12,16 @@ from sqlalchemy.sql.expression import literal_column
 Base = declarative_base()
 
 
+class PollState(enum.Enum):
+    prepared = 0
+    active = 1
+    closed = 2
+
+
 class Poll(Base):
     __tablename__ = "poll"
     poll_id = Column(Integer, primary_key=True)
-    active = Column(Boolean, nullable=False, default=False)
+    state = Column(Enum(PollState), nullable=False, default=PollState.prepared)
     label = Column(String(1024), nullable=False)
 
     answer_options: List = relationship("AnswerOption")
@@ -77,24 +84,31 @@ class MyDatabaseSession:
     def get_poll_by_id(self, poll_id: int) -> Poll:
         return self.session.query(Poll).filter(Poll.poll_id == poll_id).first()
 
-    def get_polls(self, active: bool) -> List[Poll]:
-        return self.session.query(Poll).filter(Poll.active == active).all()
+    def get_polls(self, state: PollState) -> List[Poll]:
+        return self.session.query(Poll).filter(Poll.state == state).all()
 
-    def add_poll(self, label: str, active: bool, answer_options: List[str], tokens: List[str]) -> Poll:
+    def add_poll(self, label: str, answer_options: List[str]) -> Poll:
         poll = Poll()
         poll.label = label
-        poll.active = active
+        poll.state = PollState.prepared
         for answer_label in answer_options:
             poll.answer_options.append(AnswerOption(answer_label))
-        for token in tokens:
-            poll.votes.append(Vote(token))
         self.session.add(poll)
         self.session.flush()
         return poll
 
+    def activate_poll(self, poll_id: int, tokens: List[str]) -> bool:
+        poll = self.get_poll_by_id(poll_id)
+        if poll is None or poll.state != PollState.prepared:
+            return False
+        poll.state = PollState.active
+        for token in tokens:
+            poll.votes.append(Vote(token))
+        return True
+
     def close_poll(self, poll_id: int):
         poll: Poll = self.get_poll_by_id(poll_id)
-        poll.active = False
+        poll.state = PollState.closed
 
     def get_vote(self, poll_id, token) -> Vote:
         return self.session.query(Vote).filter(Vote.poll_id == poll_id, Vote.token == token).first()
@@ -155,8 +169,10 @@ def _set_sqlite_pragma(dbapi_connection, _connection_record):
 def db_test(database_url):
     db = MyDatabase(database_url)
     with my_session_scope(db) as session:  # type: MyDatabaseSession
-        session.add_poll("test-poll", True, ["ja", "nein"], ["abc1", "abc2"])
-        session.add_poll("test-poll-beta", False, ["ja", "nein", "vielleicht"], ["def1", "def2", "def3"])
+        poll1 = session.add_poll("test-poll", ["ja", "nein"], )
+        poll2 = session.add_poll("test-poll-beta", ["ja", "nein", "vielleicht"])
+        poll3 = session.add_poll("test-poll-gamma", ["ja", "nein", "vielleicht"])
+        session.activate_poll(poll1.poll_id, ["abc1", "abc2"])
+        session.activate_poll(poll2.poll_id, ["def1", "def2", "def3"])
 
-
-# db_test('sqlite:///./testdb.sqlite')
+#db_test('sqlite:///./testdb.sqlite')

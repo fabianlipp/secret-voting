@@ -2,18 +2,23 @@ import json
 from typing import List
 
 from flask import Flask, g, request, render_template
-from db import my_session_scope, MyDatabase, MyDatabaseSession, Poll, Vote
+from db import my_session_scope, MyDatabase, MyDatabaseSession, Poll, Vote, PollState
 
 app = Flask(__name__)
 
 my_database = MyDatabase('sqlite:///./testdb.sqlite')
 
 
+@app.route('/')
+def main():
+    return render_template('main.html')
+
+
 @app.route('/<poll_id>')
 def vote_form(poll_id):
     with my_session_scope(my_database) as session:  # type: MyDatabaseSession
         poll: Poll = session.get_poll_by_id(poll_id)
-        if not poll.active:
+        if poll.state != PollState.active:
             return render_template('message.html', state="not_active", poll_label=poll.label, poll_id=poll_id)
         return render_template('index.html', poll_id=poll_id, poll_label=poll.label, answer_options=poll.answer_options)
 
@@ -27,7 +32,7 @@ def submit_vote(poll_id):
         vote: Vote = session.get_vote(poll_id, token)
         if not vote:
             return render_template('message.html', poll_label=poll.label, state="token_invalid")
-        if not poll.active:
+        if poll.state != PollState.active:
             return render_template('message.html', poll_label=poll.label, state="not_active")
         vote.answer_id = answer
         return render_template('message.html', poll_label=poll.label, state="successful")
@@ -37,9 +42,11 @@ def submit_vote(poll_id):
 @app.route('/admin/')
 def admin_overview():
     with my_session_scope(my_database) as session:  # type: MyDatabaseSession
-        active_polls = session.get_polls(True)
-        closed_polls = session.get_polls(False)
-        return render_template('admin_overview.html', active_polls=active_polls, closed_polls=closed_polls)
+        prepared_polls = session.get_polls(PollState.prepared)
+        active_polls = session.get_polls(PollState.active)
+        closed_polls = session.get_polls(PollState.closed)
+        return render_template('admin_overview.html', prepared_polls=prepared_polls, active_polls=active_polls,
+                               closed_polls=closed_polls)
 
 
 @app.route('/admin/new_poll', methods=['GET', 'POST'])
@@ -50,11 +57,27 @@ def new_poll():
         label = request.form["label"]
         request_answers: List[str] = request.form.getlist("answer[]")
         answer_options = [x.strip() for x in request_answers if x.strip()]
+        with my_session_scope(my_database) as session:  # type: MyDatabaseSession
+            poll = session.add_poll(label, answer_options)
+            return render_template('admin_message.html', msg="create_success", poll_id=poll.poll_id)
+
+
+@app.route('/admin/activate_poll/<poll_id>', methods=['GET', 'POST'])
+def activate_poll(poll_id):
+    if request.method == 'GET':
+        with my_session_scope(my_database) as session:  # type: MyDatabaseSession
+            poll = session.get_poll_by_id(poll_id)
+            if poll is None or poll.state != PollState.prepared:
+                return render_template('admin_message.html', msg="poll_not_prepared")
+            return render_template('admin_activate_poll.html', label=poll.label, poll_id=poll.poll_id)
+    elif request.method == 'POST':
         request_tokens = json.loads(request.form["tokens"])
         tokens = request_tokens['tokens']
         with my_session_scope(my_database) as session:  # type: MyDatabaseSession
-            poll = session.add_poll(label, True, answer_options, tokens)
-            return render_template('admin_message.html', msg="create_success", poll_id = poll.poll_id)
+            if session.activate_poll(poll_id, tokens):
+                return render_template('admin_message.html', msg="poll_activated", poll_id=poll_id)
+            else:
+                return render_template('admin_message.html', msg="poll_activate_error", poll_id=poll_id)
 
 
 @app.route('/admin/close_poll/<poll_id>')
