@@ -7,9 +7,15 @@
 <body>
 <p>
     {% if msg == "create_success" %}
-        Abstimmung erzeugt und aktiviert (ID {{ poll_id }}).
+        Abstimmung erzeugt (ID {{ poll_id }}).
+    {% elif msg == "poll_activated" %}
+        Abstimmung aktiviert (ID {{ poll_id }}).
     {% elif msg == "poll_closed" %}
-        Abstimmung geschlossen: ID {{ poll_id }}
+        Abstimmung geschlossen: ID {{ poll_id }}.
+    {% elif msg == "poll_not_prepared" %}
+        Abstimmung nicht vorhanden oder bereits aktiv/beendet.
+    {% elif msg == "poll_activate_error" %}
+        Abstimmung konnte nicht aktiviert werden.
     {% else %}
         Unbekannter Grund.
     {% endif %}

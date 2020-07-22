@@ -8,6 +8,17 @@
 <h3>New poll</h3>
     <a href="/admin/new_poll">New poll</a>
 
+<h3>Prepared polls</h3>
+<ul>
+    {% for poll in prepared_polls %}
+        <li>
+            [{{ poll.poll_id }}]
+            {{ poll.label }}
+            <a href="/admin/activate_poll/{{ poll.poll_id }}">Activate Poll</a>
+        </li>
+    {% endfor %}
+</ul>
+
 <h3>Active polls</h3>
 <ul>
     {% for poll in active_polls %}
