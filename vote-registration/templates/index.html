@@ -4,30 +4,55 @@
     <title>Secret Voting</title>
     <script src="//code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
-    <script src="static/secret-voting.js"></script>
+    <link rel="stylesheet" href="{{url_for('.static', filename='bootstrap.min.css')}}">
+    <script src="{{url_for('.static', filename='bootstrap.bundle.min.js')}}"></script>
+    <script src="{{url_for('.static', filename='secret-voting.js')}}"></script>
     <script type="text/javascript">
         const secret_voting_token = "{{ token }}";
     </script>
 </head>
 <body>
-    <h1>Secret Voting</h1>
-    <p>Async mode is: <b>{{ async_mode }}</b></p>
-    {% if local_mode %}
-        <p style="color:red;"><b>Warning: Local mode active!</b></p>
-    {% endif %}
-    <p>Server connection state: <span id="connection_state"></span></p>
-    <p>Current state: <span id="state"></span></p>
-    <h2>Voting:</h2>
-    Your name: <span id="fullname"></span>
-    <form id="voting_register" method="POST" action='#'>
-        <input type="submit" value="Register for voting">
-        <span id="register_success"></span>
-    </form>
-    <h3>Registered Users:</h3>
-    <ul id="list-of-users"></ul>
+    <div class="container pt-3">
+        <h1>Secret Voting | Vote Registration</h1>
+        {% if local_mode %}
+            <div class="alert alert-danger"><b>Warning: Local mode active!</b></div>
+        {% endif %}
+        <div class="row"> 
+            <div class="col-12">
+                <h2>Voting:</h2>
+                Your name: <span id="fullname"></span>
+	    </div>
+	    <div class="col-6">
+                <form id="voting_register" method="POST" action='#'>
+                    <input type="submit" value="Register for voting">
+                    <span id="register_success"></span>
+                </form>
+		<hr>
+                <h3>Your token:</h3>
+		<div class="input-group">
+                    <input type="text" id="your-token" class="form-control" placeholder="Not generated yet." readonly>
+		    <span class="input-group-append">
+                        <button id="copy-btn" class="btn btn-primary disabled">copy</button>
+                    </span>
+		</div>
+		<a href="" id="voting-link" target="_blank"></a>
+            </div>
+	    <div class="col-6">
+                <h3>Registered Users:</h3>
+                <ul id="list-of-users"></ul>
+            </div>
+	</div>
+	<div class="row">
 
-    <h3>Your token:</h3>
-    <div id="your-token">Not generated yet.</div>
-    <div id="voting-link">Not generated yet.</div>
+	</div>
+	<div class="row text-right">
+            <div class="col-12">
+	        <hr>
+                <div class="text-muted small">
+                    Async mode: <b>{{ async_mode }}</b> | Server connection state: <b id="connection_state"></b> | Current state: <b id="state"></b>
+                </div>
+            </div>
+	</div>
+    </div>
 </body>
 </html>

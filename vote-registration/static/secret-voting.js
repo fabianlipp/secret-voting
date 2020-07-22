@@ -47,8 +47,21 @@ $(document).ready(function() {
     });
 
     socket.on('generated_token', function (msg) {
-        $('#your-token').html(msg.token);
-        $('#voting-link').html(msg.voting_link);
+        var yourToken = $('#your-token');
+	yourToken.val(msg.token);
+
+        var votingLink = $('#voting-link');
+        votingLink.html(msg.voting_link);
+        votingLink.attr('href', msg.voting_link);
+	
+	var copyBtn = $('#copy-btn');
+        copyBtn.removeClass('disabled');
+
+	copyBtn.click(function () {
+            yourToken.select();
+            if (typeof yourToken.setSelectionRange === "function") yourToken.setSelectionRange(0,9999);
+            document.execCommand('copy');
+	});
     });
 
     socket.on('initial_status', function (msg) {
