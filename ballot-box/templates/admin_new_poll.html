@@ -7,6 +7,14 @@
 <body>
     <form name="new_poll" method="POST">
         <p>Label: <input type="text" name="label"/></p>
+        <p>Typ:
+            {% for name, member in poll_types %}
+                <input type="radio" name="type" value="{{ name }}" />{{ name }}<br />
+            {% endfor %}
+        </p>
+        <p>
+            Number of votes: <input type="text" name="numVotes"/>
+        </p>
         <h3>Answer Options</h3>
         <p><input type="text" name="answer[]"/></p>
         <p><input type="text" name="answer[]"/></p>
