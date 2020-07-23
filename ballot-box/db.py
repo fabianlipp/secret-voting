@@ -4,7 +4,9 @@ from sqlite3 import Connection as SQLite3Connection
 from typing import List
 
 import sqlalchemy.engine
-from sqlalchemy import Column, Integer, String, ForeignKey, event, create_engine, func, Enum
+from sqlalchemy import Column, Integer, String, ForeignKey, event, create_engine, func, Enum, Table, \
+    ForeignKeyConstraint
+from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship, Session, Query
 from sqlalchemy.sql.expression import literal_column
@@ -18,30 +20,34 @@ class PollState(enum.Enum):
     closed = 2
 
 
+class PollType(enum.Enum):
+    singleVote = 0
+    multiPersonVote = 1
+
+
 class Poll(Base):
     __tablename__ = "poll"
     poll_id = Column(Integer, primary_key=True)
     state = Column(Enum(PollState), nullable=False, default=PollState.prepared)
     label = Column(String(1024), nullable=False)
+    type = Column(Enum(PollType), nullable=False, default=PollType.singleVote)
+    numVotes = Column(Integer, nullable=False, default=1)
 
     answer_options: List = relationship("AnswerOption")
     votes: List = relationship("Vote")
 
-    #def __init__(self, chat_id, username, first_name, last_name, time_start=None):
-    #    self.chat_id = chat_id
-    #    self.username = username
-    #    self.first_name = first_name
-    #    self.last_name = last_name
 
-    #    if time_start is not None:
-    #        self.time_start = time_start
-    #    else:
-    #        self.time_start = int(time.time())
-    #    self.last_msg = None
+association_table = Table('voteAnswers', Base.metadata,
+                          Column('poll_id', Integer, primary_key=True),
+                          Column('token', String(20), primary_key=True),
+                          Column('answer_id', Integer, ForeignKey('answer_option.answer_id'), primary_key=True),
+                          ForeignKeyConstraint(('poll_id', 'token'), ('vote.poll_id', 'vote.token'))
+                          )
 
-    #def __repr__(self):
-    #    return "<User(chat_id='%s', username='%s', first_name='%s', last_name='%s')>" \
-    #           % (self.chat_id, self.username, self.first_name, self.last_name)
+
+class VoteAnswers(Base):
+    __table__ = association_table
+    vote = relationship("Vote", backref="association_recs")
 
 
 class AnswerOption(Base):
@@ -49,6 +55,8 @@ class AnswerOption(Base):
     answer_id = Column(Integer, primary_key=True)
     poll_id = Column(Integer, ForeignKey(Poll.poll_id), nullable=False)
     label = Column(String(1024), nullable=False)
+
+    votes = relationship("Vote", secondary=association_table)
 
     def __init__(self, label):
         self.label = label
@@ -58,11 +66,13 @@ class Vote(Base):
     __tablename__ = "vote"
     poll_id = Column(Integer, ForeignKey(Poll.poll_id), primary_key=True)
     token = Column(String(20), primary_key=True)
-    answer_id = Column(Integer, ForeignKey(AnswerOption.answer_id), nullable=True)
-    answer_option = relationship("AnswerOption")
+
+    answerOptions = relationship("AnswerOption", secondary=association_table)
+    association_ids = association_proxy(
+        "association_recs", "answer_id",
+        creator=lambda aid: VoteAnswers(answer_id=aid))
 
     def __init__(self, token):
-        self.answer_id = None
         self.token = token
 
 
@@ -87,10 +97,12 @@ class MyDatabaseSession:
     def get_polls(self, state: PollState) -> List[Poll]:
         return self.session.query(Poll).filter(Poll.state == state).all()
 
-    def add_poll(self, label: str, answer_options: List[str]) -> Poll:
+    def add_poll(self, label: str, poll_type: PollType, num_votes: int, answer_options: List[str]) -> Poll:
         poll = Poll()
         poll.label = label
         poll.state = PollState.prepared
+        poll.type = poll_type
+        poll.numVotes = num_votes
         for answer_label in answer_options:
             poll.answer_options.append(AnswerOption(answer_label))
         self.session.add(poll)
@@ -118,12 +130,14 @@ class MyDatabaseSession:
 
     def get_results(self, poll_id) -> List:
         # This union of queries simulates a full outer join
-        q1: Query = self.session.query(Vote.answer_id, AnswerOption.label, func.count(Vote.token).label("count"))\
+        q1: Query = self.session.query(AnswerOption.answer_id, AnswerOption.label, func.count(Vote.token).label("count"))\
+            .select_from(Vote)\
+            .join(VoteAnswers, isouter=True)\
             .join(AnswerOption, isouter=True)\
-            .filter(Vote.poll_id == poll_id).group_by(Vote.answer_id)
+            .filter(Vote.poll_id == poll_id).group_by(AnswerOption.answer_id)
         q2: Query = self.session.query(AnswerOption.answer_id, AnswerOption.label, literal_column("0").label("count"))\
-            .join(Vote, isouter=True)\
-            .filter(AnswerOption.poll_id == poll_id, Vote.token.is_(None))
+            .join(VoteAnswers, isouter=True)\
+            .filter(AnswerOption.poll_id == poll_id, VoteAnswers.token.is_(None))
         return q1.union(q2).all()
 
 
@@ -131,7 +145,7 @@ class MyDatabase:
     db_engine = None
 
     def __init__(self, database_url):
-        self.db_engine = create_engine(database_url, pool_pre_ping=True, echo=False)
+        self.db_engine = create_engine(database_url, pool_pre_ping=True, echo=True)
         try:
             Base.metadata.create_all(self.db_engine)
             # print("Tables created")
@@ -176,3 +190,16 @@ def db_test(database_url):
         session.activate_poll(poll2.poll_id, ["def1", "def2", "def3"])
 
 #db_test('sqlite:///./testdb.sqlite')
+
+db = MyDatabase('sqlite:///./testdb.sqlite')
+session: MyDatabaseSession
+with my_session_scope(db) as session:
+    poll = session.get_poll_by_id(1)
+    vote = session.get_vote(1, "abc")
+    #vote.answerOptions.clear()
+
+    #vote.association_ids.extend([2])
+
+    session.commit()
+
+    print(vote)

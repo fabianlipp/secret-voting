@@ -2,7 +2,7 @@ import json
 from typing import List
 
 from flask import Flask, g, request, render_template
-from db import my_session_scope, MyDatabase, MyDatabaseSession, Poll, Vote, PollState
+from db import my_session_scope, MyDatabase, MyDatabaseSession, Poll, Vote, PollState, PollType
 
 app = Flask(__name__)
 
@@ -20,13 +20,13 @@ def vote_form(poll_id):
         poll: Poll = session.get_poll_by_id(poll_id)
         if poll.state != PollState.active:
             return render_template('message.html', state="not_active", poll_label=poll.label, poll_id=poll_id)
-        return render_template('index.html', poll_id=poll_id, poll_label=poll.label, answer_options=poll.answer_options)
+        return render_template('index.html', poll=poll)
 
 
 @app.route('/<poll_id>/submit_vote', methods=["POST"])
 def submit_vote(poll_id):
     token = request.form['token']
-    answer = request.form['answer']
+    answers = request.form.getlist('answer')
     with my_session_scope(my_database) as session:  # type: MyDatabaseSession
         poll: Poll = session.get_poll_by_id(poll_id)
         vote: Vote = session.get_vote(poll_id, token)
@@ -34,7 +34,11 @@ def submit_vote(poll_id):
             return render_template('message.html', poll_label=poll.label, state="token_invalid")
         if poll.state != PollState.active:
             return render_template('message.html', poll_label=poll.label, state="not_active")
-        vote.answer_id = answer
+        # TODO: More validation needed?
+        if len(answers) > poll.numVotes:
+            return render_template('message.html', poll_label=poll.label, state="too_many_votes")
+        vote.answerOptions.clear()
+        vote.association_ids.extend([int(x) for x in answers])
         return render_template('message.html', poll_label=poll.label, state="successful")
 
 
@@ -52,13 +56,20 @@ def admin_overview():
 @app.route('/admin/new_poll', methods=['GET', 'POST'])
 def new_poll():
     if request.method == 'GET':
-        return render_template('admin_new_poll.html')
+        return render_template('admin_new_poll.html', poll_types=PollType.__members__.items())
     elif request.method == 'POST':
         label = request.form["label"]
+        poll_type = PollType[request.form["type"]]
+        if poll_type == PollType.multiPersonVote:
+            num_votes = request.form["numVotes"]
+        else:
+            num_votes = 1
         request_answers: List[str] = request.form.getlist("answer[]")
         answer_options = [x.strip() for x in request_answers if x.strip()]
+        if poll_type == PollType.multiPersonVote:
+            answer_options.append('Leerer Stimmzettel')
         with my_session_scope(my_database) as session:  # type: MyDatabaseSession
-            poll = session.add_poll(label, answer_options)
+            poll = session.add_poll(label, poll_type, num_votes, answer_options)
             return render_template('admin_message.html', msg="create_success", poll_id=poll.poll_id)
 
 

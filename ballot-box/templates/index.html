@@ -9,16 +9,18 @@
 <body>
     <div class="container pt-3">
         <h1>Secret Voting | Ballot Box</h1>
-        <h2>Poll: {{ poll_label }}</h2>
+        <h2>Poll: {{ poll.label }}</h2>
+        <p>Number of votes: {{ poll.numVotes }}</p>
 
-        <form id="vote_submit" method="POST" action="/{{ poll_id }}/submit_vote">
+        {% set inputType = 'checkbox' if poll.numVotes > 1 else 'radio' %}
+            <form id="vote_submit" method="POST" action="/{{ poll.poll_id }}/submit_vote">
             <input type="text" name="token" value="Token">
-            {% for option in answer_options %}
-                <input type="radio" name="answer" value="{{ option.answer_id }}">{{ option.label }}
-            {% endfor %}
-            <input type="submit" value="Give Vote">
-            <span id="register_success"></span>
-        </form>
+        {% for option in poll.answer_options %}
+            <input type="{{ inputType }}" name="answer" value="{{ option.answer_id }}">{{ option.label }}
+        {% endfor %}
+        <input type="submit" value="Give Vote">
+        <span id="register_success"></span>
+    </form>
     </div>
 </body>
 </html>

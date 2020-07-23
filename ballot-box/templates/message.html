@@ -14,6 +14,8 @@
     Dein Token wurde nicht erkannt.
 {% elif state == "successful" %}
     Stimme wurde registriert.
+{% elif state == "too_many_votes" %}
+    Zu viele Stimmen abgegeben. Stimme wurde nicht registriert.
 {% else %}
     Unbekannter Grund.
 {% endif %}

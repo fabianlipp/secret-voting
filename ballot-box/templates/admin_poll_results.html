@@ -17,7 +17,13 @@
     <h3>Individual votes</h3>
     <ul>
     {% for vote in votes %}
-        <li>{{ vote.token }} - {{ vote.answer_id }} - {{ vote.answer_option.label }}</li>
+        <li>
+            {{ vote.token }} -
+            {% for answer_option in vote.answerOptions %}
+                [{{ answer_option.answer_id }},
+                {{ answer_option.label }}] +
+            {% endfor %}
+        </li>
     {% endfor %}
     </ul>
 </body>
