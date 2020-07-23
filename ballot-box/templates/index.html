@@ -2,20 +2,25 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Secret Voting</title>
+    <link rel="stylesheet" href="{{url_for('.static', filename='bootstrap.min.css')}}">
+    <script src="{{url_for('.static', filename='bootstrap.bundle.min.js')}}"></script>
 </head>
 <body>
-    <p>Poll: {{ poll.label }}</p>
-    <p>Number of votes: {{ poll.numVotes }}</p>
+    <div class="container pt-3">
+        <h1>Secret Voting | Ballot Box</h1>
+        <h2>Poll: {{ poll.label }}</h2>
+        <p>Number of votes: {{ poll.numVotes }}</p>
 
-    {% set inputType = 'checkbox' if poll.numVotes > 1 else 'radio' %}
-    <form id="vote_submit" method="POST" action="/{{ poll.poll_id }}/submit_vote">
-        <input type="text" name="token" value="Token">
+        {% set inputType = 'checkbox' if poll.numVotes > 1 else 'radio' %}
+            <form id="vote_submit" method="POST" action="/{{ poll.poll_id }}/submit_vote">
+            <input type="text" name="token" value="Token">
         {% for option in poll.answer_options %}
             <input type="{{ inputType }}" name="answer" value="{{ option.answer_id }}">{{ option.label }}
         {% endfor %}
         <input type="submit" value="Give Vote">
         <span id="register_success"></span>
     </form>
+    </div>
 </body>
 </html>
