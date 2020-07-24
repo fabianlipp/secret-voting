@@ -10,8 +10,9 @@
     <script src="{{url_for('.static', filename='secret-voting.js')}}"></script>
     <script type="text/javascript">
         const secret_voting_token = "{{ token }}";
+        window.history.pushState(null, null, "/admin");
     </script>
-    <title>Administrator View</title>
+    <title>Admin Vote Registration / Secret Voting</title>
 </head>
 <body>
     <div class="container pt-3">
