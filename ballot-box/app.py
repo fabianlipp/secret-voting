@@ -90,8 +90,9 @@ def activate_poll(poll_id):
     elif request.method == 'POST':
         request_tokens = json.loads(request.form["tokens"])
         tokens = request_tokens['tokens']
+        attendees = request_tokens['users']
         with my_session_scope(my_database) as session:  # type: MyDatabaseSession
-            if session.activate_poll(poll_id, tokens):
+            if session.activate_poll(poll_id, tokens, attendees):
                 return render_template('admin_message.html', msg="poll_activated", poll_id=poll_id)
             else:
                 return render_template('admin_message.html', msg="poll_activate_error", poll_id=poll_id)
