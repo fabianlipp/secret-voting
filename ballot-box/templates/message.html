@@ -4,25 +4,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="{{url_for('.static', filename='bootstrap.min.css')}}">
-    <title>Secert Voting</title>
+    <title>Secret Voting</title>
 </head>
 <body>
 <div class="container pt-3">
-<div class="alert alert-danger"><b>Error:</b> 
 {% if state == "no_poll_id" %}
-    URL incomplete.
+    <div class="alert alert-danger"><b>Error:</b>URL incomplete.</div>
 {% elif state == "not_active" %}
-    Voting is not active.
+    <div class="alert alert-danger"><b>Error:</b>Voting is not active.</div>
 {% elif state == "token_invalid" %}
-    Token is invalid.
+    <div class="alert alert-danger"><b>Error:</b>Token is invalid.</div>
 {% elif state == "successful" %}
-    Vote was registered.
+    <div class="alert alert-success">Vote was registered.</div>
 {% elif state == "too_many_votes" %}
-    Too many ticks. Vote was not registered.
+    <div class="alert alert-danger"><b>Error:</b>Too many ticks. Vote was not registered.</div>
 {% else %}
-    unknown reason
+    <div class="alert alert-warning">unknown reason</div>
 {% endif %}
-</div>
 <p>Poll: {{ poll_label }}</p>
 </div>
 </body>

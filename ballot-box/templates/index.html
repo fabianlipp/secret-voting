@@ -25,7 +25,7 @@
         {% for option in poll.answer_options %}
             <div class="form-check">
                 <input type="{{ inputType }}" id="ai-{{ option.answer_id }}" name="answer" class="form-check-input" value="{{ option.answer_id }}">
-                <label class="form-check-label" for="ai-{{ option.answer_id }}">{{ option.label }}"</label>
+                <label class="form-check-label" for="ai-{{ option.answer_id }}">{{ option.label }}</label>
             </div>
         {% endfor %}
             <br>
