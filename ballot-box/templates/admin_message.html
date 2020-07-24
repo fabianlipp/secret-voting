@@ -1,13 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="{{url_for('.static', filename='bootstrap.min.css')}}">
+    <title>Secret Voting</title>
 </head>
 <body>
-<p>
+<div class="container pt-3">
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/admin">Admin</a></li>
+        </ol>
+    </nav>
+
     {% if msg == "create_success" %}
-        Abstimmung erzeugt (ID {{ poll_id }}).
+        <div class="alert alert-success">Abstimmung erzeugt (ID {{ poll_id }}).</div>
     {% elif msg == "poll_activated" %}
         Abstimmung aktiviert (ID {{ poll_id }}).
     {% elif msg == "poll_closed" %}
@@ -19,6 +27,6 @@
     {% else %}
         Unbekannter Grund.
     {% endif %}
-</p>
+</div>
 </body>
 </html>
