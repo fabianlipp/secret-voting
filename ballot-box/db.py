@@ -145,7 +145,7 @@ class MyDatabase:
     db_engine = None
 
     def __init__(self, database_url):
-        self.db_engine = create_engine(database_url, pool_pre_ping=True, echo=True)
+        self.db_engine = create_engine(database_url, pool_pre_ping=True, echo=False)
         try:
             Base.metadata.create_all(self.db_engine)
             # print("Tables created")
@@ -178,28 +178,3 @@ def _set_sqlite_pragma(dbapi_connection, _connection_record):
         cursor = dbapi_connection.cursor()
         cursor.execute("PRAGMA foreign_keys=ON;")
         cursor.close()
-
-
-def db_test(database_url):
-    db = MyDatabase(database_url)
-    with my_session_scope(db) as session:  # type: MyDatabaseSession
-        poll1 = session.add_poll("test-poll", ["ja", "nein"], )
-        poll2 = session.add_poll("test-poll-beta", ["ja", "nein", "vielleicht"])
-        poll3 = session.add_poll("test-poll-gamma", ["ja", "nein", "vielleicht"])
-        session.activate_poll(poll1.poll_id, ["abc1", "abc2"])
-        session.activate_poll(poll2.poll_id, ["def1", "def2", "def3"])
-
-#db_test('sqlite:///./testdb.sqlite')
-
-db = MyDatabase('sqlite:///./testdb.sqlite')
-session: MyDatabaseSession
-with my_session_scope(db) as session:
-    poll = session.get_poll_by_id(1)
-    vote = session.get_vote(1, "abc")
-    #vote.answerOptions.clear()
-
-    #vote.association_ids.extend([2])
-
-    session.commit()
-
-    print(vote)
