@@ -31,6 +31,13 @@
         </li>
     {% endfor %}
     </ul>
+
+    <h3>Participants</h3>
+    <ul>
+        {% for attendee in poll.attendees %}
+            <li>{{ attendee.name }}</li>
+        {% endfor %}
+    </ul>
 </div>
 </body>
 </html>

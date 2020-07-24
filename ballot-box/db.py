@@ -35,6 +35,7 @@ class Poll(Base):
 
     answer_options: List = relationship("AnswerOption")
     votes: List = relationship("Vote")
+    attendees: List = relationship("Attendee")
 
 
 association_table = Table('voteAnswers', Base.metadata,
@@ -76,6 +77,16 @@ class Vote(Base):
         self.token = token
 
 
+class Attendee(Base):
+    __tablename__ = "attendee"
+    attendee_id = Column(Integer, primary_key=True, autoincrement=True)
+    poll_id = Column(Integer, ForeignKey(Poll.poll_id))
+    name = Column(String(255))
+
+    def __init__(self, name):
+        self.name = name
+
+
 class MyDatabaseSession:
     session = None
 
@@ -109,13 +120,15 @@ class MyDatabaseSession:
         self.session.flush()
         return poll
 
-    def activate_poll(self, poll_id: int, tokens: List[str]) -> bool:
+    def activate_poll(self, poll_id: int, tokens: List[str], attendees: List[str]) -> bool:
         poll = self.get_poll_by_id(poll_id)
         if poll is None or poll.state != PollState.prepared:
             return False
         poll.state = PollState.active
         for token in tokens:
             poll.votes.append(Vote(token))
+        for attendee in attendees:
+            poll.attendees.append(Attendee(attendee))
         return True
 
     def close_poll(self, poll_id: int):
