@@ -18,9 +18,14 @@ def main():
 def vote_form(poll_id):
     with my_session_scope(my_database) as session:  # type: MyDatabaseSession
         poll: Poll = session.get_poll_by_id(poll_id)
-        if poll.state != PollState.active:
+        if poll.state == PollState.prepared:
             return render_template('message.html', state="not_active", poll_label=poll.label, poll_id=poll_id)
-        return render_template('index.html', poll=poll)
+        elif poll.state == PollState.active:
+            return render_template('index.html', poll=poll)
+        else:
+            answer_options = session.get_results(poll_id)
+            votes = session.get_votes(poll_id)
+            return render_template('poll_results.html', poll=poll, answer_options=answer_options, votes=votes)
 
 
 @app.route('/<poll_id>/submit_vote', methods=["POST"])
@@ -96,15 +101,6 @@ def close_poll(poll_id):
     with my_session_scope(my_database) as session:  # type: MyDatabaseSession
         session.close_poll(poll_id)
         return render_template('admin_message.html', msg="poll_closed", poll_id=poll_id)
-
-
-@app.route('/admin/poll_results/<poll_id>')
-def poll_results(poll_id):
-    with my_session_scope(my_database) as session:  # type: MyDatabaseSession
-        poll = session.get_poll_by_id(poll_id)
-        answer_options = session.get_results(poll_id)
-        votes = session.get_votes(poll_id)
-        return render_template('admin_poll_results.html', poll=poll, answer_options=answer_options, votes=votes)
 
 
 if __name__ == '__main__':
