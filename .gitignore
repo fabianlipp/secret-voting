@@ -1,8 +1,14 @@
 /.idea/
+/.vimrc
 /__pycache__/
+/ballot-box/static/bootstrap*
+/ballot-box/static/jquery*
 /docker-compose.yml
 /vote-registration/certs/*
 !/vote-registration/certs/README.md
 /vote-registration/settings.json
+/vote-registration/static/bootstrap*
+/vote-registration/static/jquery*
+/vote-registration/static/socket*
 /venv/
 

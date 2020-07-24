@@ -1,18 +1,42 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="{{url_for('.static', filename='bootstrap.min.css')}}">
+    <script src="{{url_for('.static', filename='jquery-1.12.4.min.js')}}"></script>
+    <script src="{{url_for('.static', filename='bootstrap.bundle.min.js')}}"></script>
     <title>Secret Voting</title>
 </head>
 <body>
-    <h1>Secret Voting &ndash; Local Mode</h1>
-    <form id="local-user" method="POST" action='/'>
-    <input type="text" name="fullname" placeholder="Fullname"><br>
-    <input type="text" name="userid" placeholder="UserID"><br>
-    <input type="checkbox" name="is_admin"> is admin <br>
-    <input type="checkbox" name="is_presenter"> is presenter<br>
-    <input type="submit" value="Join with this user">
-    <span id="register_success"></span>
-    <input type="hidden" name="RelayState" value="{{ RelayState }}">
-    </form>
+    <div class="container pt-3">
+        <div class="row">
+        <h1>Secret Voting | Local Mode</h1>
+
+        <div class="col-12">
+        <form id="local-user" method="POST" action="/">
+        <input type="hidden" name="RelayState" value="{{ RelayState }}">
+        <input type="text" name="fullname" class="form-control" placeholder="Fullname"><br>
+        <input type="text" name="userid" class="form-control" placeholder="UserID"><br>
+        <div class="form-check">
+            <input type="checkbox" id="is_voting" name="is_voting" class="form-check-input" checked>
+            <label class="form-check-label" for="is_voting">is voting</label><br>
+        </div>
+        <div class="form-check">
+            <input type="checkbox" id="is_admin" name="is_admin" class="form-check-input">
+            <label class="form-check-label" for="is_admin">is admin</label><br>
+        </div>
+        <div class="form-check">
+            <input type="checkbox" id="is_presenter" name="is_presenter" class="form-check-input">
+            <label class="form-check-label" for="is_presenter">is presenter</label><br>
+        </div>
+        <br>
+        <input type="submit" class="btn btn-primary" value="Join with this user">
+
+        <span id="register_success"></span>
+        </form>
+        </div>
+        </div>
+    </div>
 </body>
 </html>

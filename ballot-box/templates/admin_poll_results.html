@@ -1,24 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="{{url_for('.static', filename='bootstrap.min.css')}}">
+    <script src="{{url_for('.static', filename='jquery-1.12.4.min.js')}}"></script>
+    <script src="{{url_for('.static', filename='bootstrap.bundle.min.js')}}"></script>
+    <script src="{{url_for('.static', filename='secret-voting.js')}}"></script>
+    <title>Secert Voting</title>
 </head>
 <body>
-    Poll: {{ poll.label }} (ID: {{ poll.poll_id }})
+<div class="container pt-3">
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/admin">Admin</a></li>
+            <li class="breadcrumb-item active">Results</li>
+        </ol>
+    </nav>
+    <h1>Poll: [{{ poll.poll_id }}] {{ poll.label }}</h1>
     <h3>Summarized results</h3>
     <ul>
     {% for option in answer_options %}
         <li>{{ option.answer_id }} - {{ option.label }} - {{ option.count }}</li>
-
     {% endfor %}
     </ul>
 
     <h3>Individual votes</h3>
     <ul>
     {% for vote in votes %}
-        <li>{{ vote.token }} - {{ vote.answer_id }} - {{ vote.answer_option.label }}</li>
+        <li>
+            {{ vote.token }} -
+            {% for answer_option in vote.answerOptions %}
+                [{{ answer_option.answer_id }},
+                {{ answer_option.label }}] +
+            {% endfor %}
+        </li>
     {% endfor %}
     </ul>
+</div>
 </body>
 </html>

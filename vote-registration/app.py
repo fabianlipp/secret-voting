@@ -27,6 +27,7 @@ login_sessions = {}
 
 
 class SamlReturnData:
+    votingStatus = False
     adminStatus = False
     presenterStatus = False
     userid = ""
@@ -38,6 +39,7 @@ class VoteRegistrationData:
     registered_fullnames = []
     registered_userids = []
     registered_sessionids = []
+    voting_title = ""
     voting_link = ""
 
 
@@ -85,6 +87,7 @@ def acs():
         # Local Mode is active, do not check SAML login data
         saml_return_data.fullname = request.form.get('fullname')
         saml_return_data.userid = request.form.get('userid')
+        saml_return_data.votingStatus = request.form.get('is_voting')
         saml_return_data.adminStatus = request.form.get('is_admin')
         saml_return_data.presenterStatus = request.form.get('is_presenter')
     else:
@@ -98,6 +101,7 @@ def acs():
         attributes = auth.get_attributes()
         saml_return_data.fullname = attributes['fullname']
         saml_return_data.userid = attributes['userid']
+        saml_return_data.votingStatus = attributes.get('is_voting', False)
         saml_return_data.adminStatus = attributes.get('is_admin', False)
         saml_return_data.presenterStatus = attributes.get('is_presenter', False)
 
@@ -108,6 +112,8 @@ def acs():
             return render_template("message.html", msg="no_admin_permissions")
         return render_template('admin.html', async_mode=socketio.async_mode, token=token, local_mode=local_mode)
     else:
+        if not saml_return_data.votingStatus:
+            return render_template("message.html", msg="no_voting_permissions")
         return render_template('index.html', async_mode=socketio.async_mode, token=token, local_mode=local_mode)
 
 
@@ -211,6 +217,7 @@ def admin_voting_start(message):
         vote_registration_data.registered_fullnames.clear()
         vote_registration_data.registered_userids.clear()
         vote_registration_data.registered_sessionids.clear()
+        vote_registration_data.voting_title = message['voting_title']
         vote_registration_data.voting_link = message['voting_link']
     emit('reset_broadcast',
          {},
@@ -235,6 +242,7 @@ def admin_voting_end(message):
             generated_tokens.sort()
             emit('generated_token',
                  {'token': token,
+                  'voting_title': vote_registration_data.voting_title,
                   'voting_link': vote_registration_data.voting_link},
                  room=sid)
             close_room(sid)

@@ -1,16 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="{{url_for('.static', filename='bootstrap.min.css')}}">
+    <script src="{{url_for('.static', filename='jquery-1.12.4.min.js')}}"></script>
+    <script src="{{url_for('.static', filename='bootstrap.bundle.min.js')}}"></script>
+    <script src="{{url_for('.static', filename='secret-voting.js')}}"></script>
+    <title>Secert Voting</title>
 </head>
 <body>
+<div class="container pt-3">
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/admin">Admin</a></li>
+        <li class="breadcrumb-item active">activate</li>
+      </ol>
+    </nav>
     <form name="activate_poll" method="POST">
         <p>Label: {{ label }}</p>
         <p>ID: {{ poll_id }}</p>
         <h3>Tokens</h3>
-        <textarea name="tokens"></textarea>
-        <p><input type="submit" value="Activate Poll"></p>
+        <textarea name="tokens" class="form-control"></textarea>
+        <br><hr><br>
+        <input type="submit" class="btn btn-primary" value="Activate Poll">
     </form>
+</div>
 </body>
 </html>
