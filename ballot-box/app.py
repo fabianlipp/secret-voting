@@ -7,7 +7,7 @@ from db import my_session_scope, MyDatabase, MyDatabaseSession, Poll, Vote, Poll
 
 app = Flask(__name__)
 
-my_database = MyDatabase(os.environ['DB_URL'])
+my_database = MyDatabase(os.getenv('DB_URL', 'sqlite:///./db.sqlite'))
 
 
 @app.route('/')
