@@ -1,26 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Secret Voting</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="{{url_for('.static', filename='bootstrap.min.css')}}">
+    <script src="{{url_for('.static', filename='jquery-1.12.4.min.js')}}"></script>
     <script src="{{url_for('.static', filename='bootstrap.bundle.min.js')}}"></script>
+    <script src="{{url_for('.static', filename='secret-voting.js')}}"></script>
+    <title>Secret Voting</title>
 </head>
 <body>
     <div class="container pt-3">
         <h1>Secret Voting | Ballot Box</h1>
         <h2>Poll: {{ poll.label }}</h2>
         <p>Number of votes: {{ poll.numVotes }}</p>
-
+        <form id="vote_submit" method="POST" action="/{{ poll.poll_id }}/submit_vote">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Token</span>
+                </div>
+                <input type="text" name="token" class="form-control" value="Token" required>
+            </div>
         {% set inputType = 'checkbox' if poll.numVotes > 1 else 'radio' %}
-            <form id="vote_submit" method="POST" action="/{{ poll.poll_id }}/submit_vote">
-            <input type="text" name="token" value="Token">
         {% for option in poll.answer_options %}
-            <input type="{{ inputType }}" name="answer" value="{{ option.answer_id }}">{{ option.label }}
+            <div class="form-check">
+                <input type="{{ inputType }}" id="ai-{{ option.answer_id }}" name="answer" class="form-check-input" value="{{ option.answer_id }}">
+                <label class="form-check-label" for="ai-{{ option.answer_id }}" value="{{ option.label }}">
+            </div>
         {% endfor %}
-        <input type="submit" value="Give Vote">
-        <span id="register_success"></span>
-    </form>
+            <br>
+            <input type="submit" class="btn btn-primary" value="Give Vote">
+        </form>
     </div>
 </body>
 </html>

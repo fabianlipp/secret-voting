@@ -26,15 +26,16 @@ $(document).ready(function() {
         if (msg.successful) {
             $('#register_success').html("You registered successfully. <b>Do not close the window!</b>");
             setControlState(true);
+            $('#register_btn').prop("disabled", true);
         } else {
             $('#register_success').html("Could not register.");
         }
     });
 
     socket.on('reset_broadcast', function(msg) {
-        $("#list-of-users").html('');
+        $("#list_of_users").html('');
         $("#register_success").html('');
-        $("#your-token").html('');
+        $("#your_token").val('');
         $("#admin_output_tokens").html('');
         $("#admin_output_names").html('');
         setState(true);
@@ -47,21 +48,23 @@ $(document).ready(function() {
     });
 
     socket.on('generated_token', function (msg) {
-        var yourToken = $('#your-token');
-	yourToken.val(msg.token);
+        var yourToken = $('#your_token');
+	    yourToken.val(msg.token);
 
-        var votingLink = $('#voting-link');
-        votingLink.html(msg.voting_link);
-        votingLink.attr('href', msg.voting_link);
+        $('#voting_title').html(msg.voting_title);
+
+        var votingLink = $('#voting_link');
+        votingLink.html('Copy token and open ballot box: <a href="'+msg.voting_link+'" target="_blank">'+msg.voting_link+'</a>');
 	
-	var copyBtn = $('#copy-btn');
-        copyBtn.removeClass('disabled');
-
-	copyBtn.click(function () {
+	    var copyBtn = $('#copy_btn');
+	    copyBtn.click(function () {
             yourToken.select();
             if (typeof yourToken.setSelectionRange === "function") yourToken.setSelectionRange(0,9999);
             document.execCommand('copy');
-	});
+	    });
+        copyBtn.prop("disabled", false);
+
+        $('#register_btn').prop("disabled", true);
     });
 
     socket.on('initial_status', function (msg) {
@@ -73,7 +76,7 @@ $(document).ready(function() {
         } else {
             setControlState(true);
         }
-        $("#fullname").html(msg.fullname);
+        $("#fullname").val(msg.fullname);
         $("#connection_state").html("Connected");
         if (msg.admin_state) {
             $("#admin_state").html("true");
@@ -101,7 +104,16 @@ $(document).ready(function() {
             "users": msg.all_users,
             "tokens": msg.all_tokens
         };
-        $("#admin_output_json").val(JSON.stringify(json_output));
+        let allTokens = $("#admin_output_json");
+        allTokens.val(JSON.stringify(json_output));
+	    
+        let copyBtn = $('#copy_btn');
+	    copyBtn.click(function () {
+            allTokens.select();
+            if (typeof allTokens.setSelectionRange === "function") allTokens.setSelectionRange(0,9999);
+            document.execCommand('copy');
+	    });
+        copyBtn.prop("disabled", false);
     });
 
     // Handlers for the different forms in the page.
@@ -116,7 +128,10 @@ $(document).ready(function() {
 
     // Admin controls
     $('form#voting_start').submit(function(event) {
-        socket.emit('admin_voting_start', {'voting_link': $("input#voting-link").val()});
+        socket.emit('admin_voting_start', {
+            'voting_title': $("input#voting_title").val(),
+            'voting_link': $("input#voting_link").val()
+        });
         return false;
     });
     $('form#voting_end').submit(function(event) {
@@ -144,5 +159,6 @@ function updateListOfUsers(all_users) {
     for (name of all_users) {
         list_contents += '<li>' + name + '</li>\n';
     }
-    $("#list-of-users").html(list_contents);
+    $("#list_of_users").html(list_contents);
+    $("#num_of_users").html(all_users.length);
 }

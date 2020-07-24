@@ -1,28 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="{{url_for('.static', filename='bootstrap.min.css')}}">
+    <script src="{{url_for('.static', filename='jquery-1.12.4.min.js')}}"></script>
+    <script src="{{url_for('.static', filename='bootstrap.bundle.min.js')}}"></script>
+    <script src="{{url_for('.static', filename='secret-voting.js')}}"></script>
     <title>Title</title>
 </head>
 <body>
+<div class="container pt-3">
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/admin">Admin</a></li>
+        <li class="breadcrumb-item active">create</li>
+      </ol>
+    </nav>
+
     <form name="new_poll" method="POST">
-        <p>Label: <input type="text" name="label"/></p>
-        <p>Typ:
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Label</span>
+            </div>
+            <input type="text" name="label" class="form-control">
+        </div>
+        <div>
+            <b>Type:</b><br>
             {% for name, member in poll_types %}
-                <input type="radio" name="type" value="{{ name }}" />{{ name }}<br />
+                <div class="form-check">
+                    <input type="radio" id="ai-{{ name }}" name="type" class="form-check-input" value="{{ name }}">
+                    <label class="form-check-label" for="ai-{{ name }}">{{ name }}</label>
+                </div>
             {% endfor %}
-        </p>
-        <p>
-            Number of votes: <input type="text" name="numVotes"/>
-        </p>
+        </div>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Number of votes</span>
+            </div>
+            <input type="number" name="numVotes" class="form-control">
+        </div>
         <h3>Answer Options</h3>
-        <p><input type="text" name="answer[]"/></p>
-        <p><input type="text" name="answer[]"/></p>
-        <p><input type="text" name="answer[]"/></p>
-        <p><input type="text" name="answer[]"/></p>
-        <p><input type="text" name="answer[]"/></p>
-        <p><input type="text" name="answer[]"/></p>
-        <p><input type="submit" value="Create Poll"></p>
+        <div id="answers">
+            <input type="text" name="answer[]" class="form-control"><br>
+        </div>
+        <input type="button" class="btn btn-success" onclick="admin_new_poll_add()" value="+ more">
+        <br><hr><br>
+        <input type="submit" class="btn btn-primary" value="Create Poll">
     </form>
 </body>
 </html>

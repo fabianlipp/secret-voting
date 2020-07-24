@@ -11,7 +11,7 @@ my_database = MyDatabase('sqlite:///./testdb.sqlite')
 
 @app.route('/')
 def main():
-    return render_template('main.html')
+    return render_template('message.html', state="no_poll_id")
 
 
 @app.route('/<poll_id>')

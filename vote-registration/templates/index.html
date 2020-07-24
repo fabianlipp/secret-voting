@@ -1,58 +1,64 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <title>Secret Voting</title>
-    <script src="//code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="{{url_for('.static', filename='bootstrap.min.css')}}">
+    <script src="{{url_for('.static', filename='jquery-1.12.4.min.js')}}"></script>
+    <script src="{{url_for('.static', filename='socket.io.js')}}"></script>
     <script src="{{url_for('.static', filename='bootstrap.bundle.min.js')}}"></script>
     <script src="{{url_for('.static', filename='secret-voting.js')}}"></script>
     <script type="text/javascript">
         const secret_voting_token = "{{ token }}";
     </script>
+    <title>Secret Voting</title>
 </head>
 <body>
     <div class="container pt-3">
         <h1>Secret Voting | Vote Registration</h1>
         {% if local_mode %}
-            <div class="alert alert-danger"><b>Warning: Local mode active!</b></div>
+            <div class="alert alert-danger"><b>Warning:</b> Local mode active!</div>
         {% endif %}
-        <div class="row"> 
-            <div class="col-12">
-                <h2>Voting:</h2>
-                Your name: <span id="fullname"></span>
-	    </div>
-	    <div class="col-6">
+        <div class="row">
+	        <div class="col-6">
+                <h2>Voting: <span id="voting_title"></span></h2>
                 <form id="voting_register" method="POST" action='#'>
-                    <input type="submit" value="Register for voting">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Your name: </span>
+                        </div>
+                        <input type="text" id="fullname" class="form-control" value="" readonly>
+                    </div>
+                    <br>
+                    <input type="submit" id="register_btn" class="btn btn-primary" value="Register for voting" disabled><br>
                     <span id="register_success"></span>
                 </form>
-		<hr>
+		        <hr>
                 <h3>Your token:</h3>
-		<div class="input-group">
-                    <input type="text" id="your-token" class="form-control" placeholder="Not generated yet." readonly>
-		    <span class="input-group-append">
-                        <button id="copy-btn" class="btn btn-primary disabled">copy</button>
+		        <div class="input-group">
+                    <input type="text" id="your_token" class="form-control" placeholder="Not generated yet." readonly>
+		            <span class="input-group-append">
+                        <input type="button" id="copy_btn" class="btn btn-primary" value="copy" disabled>
                     </span>
-		</div>
-		<a href="" id="voting-link" target="_blank"></a>
+		        </div><br>
+		        <span id="voting_link"></span>
             </div>
-	    <div class="col-6">
-                <h3>Registered Users:</h3>
-                <ul id="list-of-users"></ul>
+            <div class="col-6">
+                <h3>Registered Users: <span id="num_of_users" class="badge badge-info">0</span></h3>
+                <ul id="list_of_users"></ul>
             </div>
-	</div>
-	<div class="row">
+	    </div>
+	    <div class="row">
 
-	</div>
-	<div class="row text-right">
-            <div class="col-12">
-	        <hr>
-                <div class="text-muted small">
-                    Async mode: <b>{{ async_mode }}</b> | Server connection state: <b id="connection_state"></b> | Current state: <b id="state"></b>
-                </div>
-            </div>
-	</div>
+	    </div>
+	    <div class="row text-right">
+            <hr><br>
+            <p class="text-muted small">
+                Async mode: <b>{{ async_mode }}</b> | 
+                Server connection state: <b id="connection_state"></b> | 
+                Current state: <b id="state"></b>
+            </p>
+	    </div>
     </div>
 </body>
 </html>

@@ -1,20 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="{{url_for('.static', filename='bootstrap.min.css')}}">
+    <title>Secret Voting</title>
 </head>
 <body>
-<p>Poll: {{ poll_label }}</p>
-
-<p>
+<div class="container pt-3">
+    <div class="alert alert-danger"><b>Error:</b> 
 {% if msg == "not_authenticated" %}
     SAML Login invalid.
+{% elif msg == "no_voting_permissions" %}
+    No voting permissions.
 {% elif msg == "no_admin_permissions" %}
     No admin permissions.
 {% else %}
     Unbekannter Grund.
 {% endif %}
-</p>
+    </div>
+</div>
 </body>
 </html>

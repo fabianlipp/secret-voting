@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="{{url_for('.static', filename='bootstrap.min.css')}}">
+    <title>Secert Voting</title>
 </head>
 <body>
-<p>Poll: {{ poll_label }}</p>
-
-<p>
-{% if state == "not_active" %}
+<div class="container pt-3">
+<div class="alert alert-danger"><b>Error:</b> 
+{% if state == "no_poll_id" %}
+    URL unvollständig.
+{% elif state == "not_active" %}
     Abstimmung ist nicht aktiv.
 {% elif state == "token_invalid" %}
     Dein Token wurde nicht erkannt.
@@ -19,6 +22,8 @@
 {% else %}
     Unbekannter Grund.
 {% endif %}
-</p>
+</div>
+<p>Poll: {{ poll_label }}</p>
+</div>
 </body>
 </html>
