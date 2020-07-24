@@ -162,11 +162,6 @@ def metadata():
     return resp
 
 
-@app.route('/static/secret-voting.js')
-def send_js():
-    return app.send_static_file('secret-voting.js')
-
-
 @socketio.on('voting_register', namespace='/test')
 def voting_register(message):
     if not vote_registration_data.registration_active:
@@ -220,7 +215,7 @@ def admin_voting_start(message):
         vote_registration_data.voting_title = message['voting_title']
         vote_registration_data.voting_link = message['voting_link']
     emit('reset_broadcast',
-         {},
+         {'voting_title': vote_registration_data.voting_title},
          broadcast=True)
 
 
@@ -242,7 +237,6 @@ def admin_voting_end(message):
             generated_tokens.sort()
             emit('generated_token',
                  {'token': token,
-                  'voting_title': vote_registration_data.voting_title,
                   'voting_link': vote_registration_data.voting_link},
                  room=sid)
             close_room(sid)
@@ -295,6 +289,7 @@ def connect():
              {'registration_active': vote_registration_data.registration_active,
               'registered_fullnames': vote_registration_data.registered_fullnames,
               'already_registered': already_registered,
+              'voting_title': vote_registration_data.voting_title,
               'fullname': fullname,
               'admin_state': admin_state})
 

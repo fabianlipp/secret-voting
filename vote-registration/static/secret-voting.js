@@ -26,7 +26,6 @@ $(document).ready(function() {
         if (msg.successful) {
             $('#register_success').html("You registered successfully. <b>Do not close the window!</b>");
             setControlState(true);
-            $('#register_btn').prop("disabled", true);
         } else {
             $('#register_success').html("Could not register.");
         }
@@ -36,6 +35,7 @@ $(document).ready(function() {
         $("#list_of_users").html('');
         $("#register_success").html('');
         $("#your_token").val('');
+        $('#voting_title').html(msg.voting_title);
         $("#admin_output_tokens").html('');
         $("#admin_output_names").html('');
         setState(true);
@@ -50,8 +50,6 @@ $(document).ready(function() {
     socket.on('generated_token', function (msg) {
         var yourToken = $('#your_token');
 	    yourToken.val(msg.token);
-
-        $('#voting_title').html(msg.voting_title);
 
         var votingLink = $('#voting_link');
         votingLink.html('Copy token and open ballot box: <a href="'+msg.voting_link+'" target="_blank">'+msg.voting_link+'</a>');
@@ -76,6 +74,7 @@ $(document).ready(function() {
         } else {
             setControlState(true);
         }
+        $('#voting_title').html(msg.voting_title);
         $("#fullname").val(msg.fullname);
         $("#connection_state").html("Connected");
         if (msg.admin_state) {
