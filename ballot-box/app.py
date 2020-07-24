@@ -1,4 +1,5 @@
 import json
+import os
 from typing import List
 
 from flask import Flask, g, request, render_template
@@ -6,8 +7,7 @@ from db import my_session_scope, MyDatabase, MyDatabaseSession, Poll, Vote, Poll
 
 app = Flask(__name__)
 
-my_database = MyDatabase('sqlite:///./testdb.sqlite')
-
+my_database = MyDatabase(os.environ['DB_URL'])
 
 @app.route('/')
 def main():
