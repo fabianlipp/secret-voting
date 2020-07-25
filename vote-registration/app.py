@@ -23,6 +23,7 @@ socketio = SocketIO(app, async_mode=async_mode)
 admins = []
 session_userids = {}
 session_fullnames = {}
+session_is_voting = {}
 login_sessions = {}
 
 
@@ -111,6 +112,10 @@ def acs():
         if not saml_return_data.adminStatus:
             return render_template("message.html", msg="no_admin_permissions")
         return render_template('admin.html', async_mode=socketio.async_mode, token=token, local_mode=local_mode)
+    elif 'RelayState' in request.form and request.form['RelayState'] == 'presenter':
+        if not saml_return_data.presenterStatus:
+            return render_template("message.html", msg="no_presenter_permissions")
+        return render_template('presenter.html', async_mode=socketio.async_mode, token=token, local_mode=local_mode)
     else:
         if not saml_return_data.votingStatus:
             return render_template("message.html", msg="no_voting_permissions")
@@ -126,10 +131,13 @@ def admin():
     return redirect(auth.login('admin'))
 
 
-@app.route('/presenter')
+@app.route('/presenter', methods=['GET'])
 def presenter():
-    # TODO: Access control (needed?)
-    return render_template('presenter.html', async_mode=socketio.async_mode)
+    req = prepare_flask_request(request)
+    auth = init_saml_auth(req)
+    if auth.get_settings().get_security_data().get('localMode', False):
+        return render_template('local.html', RelayState='presenter')
+    return redirect(auth.login('presenter'))
 
 
 @app.route('/slo')
@@ -242,8 +250,6 @@ def admin_voting_end(message):
             close_room(sid)
             disconnect(sid=sid)
         vote_registration_data.registered_sessionids.clear()
-    # TODO: Close all non-admin/non-presenter sessions?
-    # TODO: Following is admin only -> admin rooom
     emit('voting_end_response',
          {'all_users': vote_registration_data.registered_fullnames,
           'all_tokens': generated_tokens})
@@ -276,12 +282,11 @@ def connect():
         admin_state = True
     else:
         admin_state = False
-    userid = saml_return_data.userid
-    fullname = saml_return_data.fullname
-    session_userids[request.sid] = userid
-    session_fullnames[request.sid] = fullname
     with vote_registration_lock:
-        if userid in vote_registration_data.registered_userids:
+        session_userids[request.sid] = saml_return_data.userid
+        session_fullnames[request.sid] = saml_return_data.fullname
+        session_is_voting[request.sid] = saml_return_data.votingStatus
+        if saml_return_data.userid in vote_registration_data.registered_userids:
             already_registered = True
         else:
             already_registered = False
@@ -290,7 +295,7 @@ def connect():
               'registered_fullnames': vote_registration_data.registered_fullnames,
               'already_registered': already_registered,
               'voting_title': vote_registration_data.voting_title,
-              'fullname': fullname,
+              'fullname': saml_return_data.fullname,
               'admin_state': admin_state})
 
 
@@ -312,4 +317,4 @@ def generate_display_token():
 
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True, host="0.0.0.0")
+    socketio.run(app, debug=True, host="0.0.0.0", port=5001)

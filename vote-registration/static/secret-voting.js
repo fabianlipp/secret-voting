@@ -24,7 +24,7 @@ $(document).ready(function() {
 
     socket.on('register_response', function(msg) {
         if (msg.successful) {
-            $('#register_success').html("You registered successfully. <b>Do not close the window!</b>");
+            $('#register_success').html("You registered successfully. <b>Do not close the window or reload!</b>");
             setControlState(true);
         } else {
             $('#register_success').html("Could not register.");
