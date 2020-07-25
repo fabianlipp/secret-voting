@@ -9,15 +9,17 @@
 <body>
 <div class="container pt-3">
 {% if state == "no_poll_id" %}
-    <div class="alert alert-danger"><b>Error:</b>URL incomplete.</div>
+    <div class="alert alert-danger"><b>Error:</b> URL incomplete.</div>
 {% elif state == "not_active" %}
-    <div class="alert alert-danger"><b>Error:</b>Voting is not active.</div>
+    <div class="alert alert-danger"><b>Error:</b> Voting is not active.</div>
 {% elif state == "token_invalid" %}
-    <div class="alert alert-danger"><b>Error:</b>Token is invalid.</div>
+    <div class="alert alert-danger"><b>Error:</b> Token is invalid.</div>
 {% elif state == "successful" %}
     <div class="alert alert-success">Vote was registered.</div>
 {% elif state == "too_many_votes" %}
-    <div class="alert alert-danger"><b>Error:</b>Too many ticks. Vote was not registered.</div>
+    <div class="alert alert-danger"><b>Error:</b> Too many ticks. Vote was not registered.</div>
+{% elif state == "invalid_combination" %}
+    <div class="alert alert-danger"><b>Error:</b> Invalid combination of ticks.</div>
 {% else %}
     <div class="alert alert-warning">unknown reason</div>
 {% endif %}

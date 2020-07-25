@@ -3,11 +3,13 @@ import os
 from typing import List
 
 from flask import Flask, request, render_template
-from db import my_session_scope, MyDatabase, MyDatabaseSession, Poll, Vote, PollState, PollType
+from db import my_session_scope, MyDatabase, MyDatabaseSession, Poll, Vote, PollState, PollType, AnswerOption
 
 app = Flask(__name__)
 
 my_database = MyDatabase(os.getenv('DB_URL', 'sqlite:///./db.sqlite'))
+
+EMPTY_VOTE = 'Leerer Stimmzettel'
 
 
 @app.route('/')
@@ -32,7 +34,7 @@ def vote_form(poll_id):
 @app.route('/<poll_id>/submit_vote', methods=["POST"])
 def submit_vote(poll_id):
     token = request.form['token']
-    answers = request.form.getlist('answer')
+    answers = [int(x) for x in request.form.getlist('answer')]
     with my_session_scope(my_database) as session:  # type: MyDatabaseSession
         poll: Poll = session.get_poll_by_id(poll_id)
         vote: Vote = session.get_vote(poll_id, token)
@@ -40,11 +42,13 @@ def submit_vote(poll_id):
             return render_template('message.html', poll_label=poll.label, state="token_invalid")
         if poll.state != PollState.active:
             return render_template('message.html', poll_label=poll.label, state="not_active")
-        # TODO: More validation needed?
+        # Validation of vote
         if len(answers) > poll.numVotes:
             return render_template('message.html', poll_label=poll.label, state="too_many_votes")
+        if len(answers) > 1 and session.contains_exclusive_answer(answers):
+            return render_template('message.html', poll_label=poll.label, state="invalid_combination")
         vote.answerOptions.clear()
-        vote.association_ids.extend([int(x) for x in answers])
+        vote.association_ids.extend(answers)
         return render_template('message.html', poll_label=poll.label, state="successful")
 
 
@@ -72,10 +76,12 @@ def new_poll():
             num_votes = 1
         request_answers: List[str] = request.form.getlist("answer[]")
         answer_options = [x.strip() for x in request_answers if x.strip()]
-        if poll_type == PollType.multiPersonVote:
-            answer_options.append('Leerer Stimmzettel')
         with my_session_scope(my_database) as session:  # type: MyDatabaseSession
             poll = session.add_poll(label, poll_type, num_votes, answer_options)
+            if poll_type == PollType.multiPersonVote:
+                answer_option_empty = AnswerOption(EMPTY_VOTE)
+                answer_option_empty.exclusive = True
+                poll.answer_options.append(answer_option_empty)
             return render_template('admin_message.html', msg="create_success", poll_id=poll.poll_id)
 
 

@@ -5,7 +5,7 @@ from typing import List
 
 import sqlalchemy.engine
 from sqlalchemy import Column, Integer, String, ForeignKey, event, create_engine, func, Enum, Table, \
-    ForeignKeyConstraint
+    ForeignKeyConstraint, Boolean
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship, Session, Query
@@ -56,6 +56,7 @@ class AnswerOption(Base):
     answer_id = Column(Integer, primary_key=True)
     poll_id = Column(Integer, ForeignKey(Poll.poll_id), nullable=False)
     label = Column(String(1024), nullable=False)
+    exclusive = Column(Boolean, nullable=False, default=False)
 
     votes = relationship("Vote", secondary=association_table)
 
@@ -152,6 +153,12 @@ class MyDatabaseSession:
             .join(VoteAnswers, isouter=True)\
             .filter(AnswerOption.poll_id == poll_id, VoteAnswers.token.is_(None))
         return q1.union(q2).all()
+
+    def contains_exclusive_answer(self, answer_options: List[Integer]) -> bool:
+        return self.session.query(AnswerOption)\
+                   .filter(AnswerOption.exclusive)\
+                   .filter(AnswerOption.answer_id.in_(answer_options))\
+                   .first() is not None
 
 
 class MyDatabase:
