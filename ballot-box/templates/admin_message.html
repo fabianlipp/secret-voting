@@ -17,15 +17,15 @@
     {% if msg == "create_success" %}
         <div class="alert alert-success">Abstimmung erzeugt (ID {{ poll_id }}).</div>
     {% elif msg == "poll_activated" %}
-        Abstimmung aktiviert (ID {{ poll_id }}).
+        <div class="alert alert-success">Abstimmung aktiviert (ID {{ poll_id }}).</div>
     {% elif msg == "poll_closed" %}
-        Abstimmung geschlossen: ID {{ poll_id }}.
+        <div class="alert alert-success">Abstimmung geschlossen: ID {{ poll_id }}.</div>
     {% elif msg == "poll_not_prepared" %}
-        Abstimmung nicht vorhanden oder bereits aktiv/beendet.
+        <div class="alert alert-danger">Abstimmung nicht vorhanden oder bereits aktiv/beendet.</div>
     {% elif msg == "poll_activate_error" %}
-        Abstimmung konnte nicht aktiviert werden.
+        <div class="alert alert-danger">Abstimmung konnte nicht aktiviert werden.</div>
     {% else %}
-        Unbekannter Grund.
+        <div class="alert alert-warning">Unbekannter Grund.</div>
     {% endif %}
 </div>
 </body>

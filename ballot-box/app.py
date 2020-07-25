@@ -27,8 +27,7 @@ def vote_form(poll_id):
             return render_template('index.html', poll=poll)
         else:
             answer_options = session.get_results(poll_id)
-            votes = session.get_votes(poll_id)
-            return render_template('poll_results.html', poll=poll, answer_options=answer_options, votes=votes)
+            return render_template('poll_results.html', poll=poll, answer_options=answer_options)
 
 
 @app.route('/<poll_id>/submit_vote', methods=["POST"])

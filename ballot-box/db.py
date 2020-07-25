@@ -154,7 +154,7 @@ class MyDatabaseSession:
             .filter(AnswerOption.poll_id == poll_id, VoteAnswers.token.is_(None))
         return q1.union(q2).all()
 
-    def contains_exclusive_answer(self, answer_options: List[Integer]) -> bool:
+    def contains_exclusive_answer(self, answer_options: List[int]) -> bool:
         return self.session.query(AnswerOption)\
                    .filter(AnswerOption.exclusive)\
                    .filter(AnswerOption.answer_id.in_(answer_options))\

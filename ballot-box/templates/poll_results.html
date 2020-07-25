@@ -21,7 +21,7 @@
 
     <h3>Individual votes</h3>
     <ul>
-    {% for vote in votes %}
+    {% for vote in poll.votes %}
         <li>
             {{ vote.token }} -
             {% for answer_option in vote.answerOptions %}
