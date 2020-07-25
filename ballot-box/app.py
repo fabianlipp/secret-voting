@@ -26,8 +26,8 @@ def vote_form(poll_id):
         elif poll.state == PollState.active:
             return render_template('index.html', poll=poll)
         else:
-            answer_options = session.get_results(poll_id)
-            return render_template('poll_results.html', poll=poll, answer_options=answer_options)
+            poll_results = session.get_results(poll_id)
+            return render_template('poll_results.html', poll=poll, poll_results=poll_results)
 
 
 @app.route('/<poll_id>/submit_vote', methods=["POST"])
