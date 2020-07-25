@@ -8,4 +8,4 @@ RUN apk add --no-cache libxml2-dev xmlsec-dev \
 COPY . /app
 WORKDIR /app
 EXPOSE 80
-CMD gunicorn -w1 --bind=0.0.0.0:80 app:app
+CMD gunicorn -w1 --bind=0.0.0.0:80 app:app --worker-class eventlet
