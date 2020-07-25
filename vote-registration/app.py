@@ -6,19 +6,15 @@ import string
 from threading import Lock
 from urllib.parse import urlparse
 
-from flask import Flask, make_response, redirect, render_template, request, session
-from flask_socketio import SocketIO, emit, join_room, close_room, disconnect
+from flask import Flask, make_response, redirect, render_template, request
+from flask_socketio import SocketIO, emit, close_room, disconnect
 from onelogin.saml2.auth import OneLogin_Saml2_Auth
-from onelogin.saml2.utils import OneLogin_Saml2_Utils
 
-# Set this variable to "threading", "eventlet" or "gevent" to test the
-# different async modes, or leave it set to None for the application to choose
-# the best option based on installed packages.
-async_mode = None
 
 app = Flask(__name__)
 SAML_CONFIG_DIRECTORY = os.path.dirname(os.path.abspath(__file__))
-socketio = SocketIO(app, async_mode=async_mode)
+# async_mode=None leaves it to the application to choose the best option based on installed packages.
+socketio = SocketIO(app, async_mode=None)
 
 admins = []
 session_userids = {}
@@ -171,7 +167,7 @@ def metadata():
 
 
 @socketio.on('voting_register', namespace='/test')
-def voting_register(message):
+def voting_register(_):
     if not vote_registration_data.registration_active:
         emit('register_response',
              {'successful': False})
@@ -198,7 +194,7 @@ def voting_register(message):
 
 
 @socketio.on('admin_voting_reset', namespace='/test')
-def admin_voting_reset(message):
+def admin_voting_reset(_):
     if request.sid not in admins:
         return
     with vote_registration_lock:
@@ -228,7 +224,7 @@ def admin_voting_start(message):
 
 
 @socketio.on('admin_voting_end', namespace='/test')
-def admin_voting_end(message):
+def admin_voting_end(_):
     if request.sid not in admins:
         return
     if not vote_registration_data.registration_active:
@@ -253,22 +249,6 @@ def admin_voting_end(message):
     emit('voting_end_response',
          {'all_users': vote_registration_data.registered_fullnames,
           'all_tokens': generated_tokens})
-
-
-# TODO: Do we need to handle disconnect?
-# @socketio.on('disconnect_request', namespace='/test')
-# def disconnect_request():
-#    @copy_current_request_context
-#    def can_disconnect():
-#        disconnect()
-#
-#    session['receive_count'] = session.get('receive_count', 0) + 1
-#    # for this emit we use a callback function
-#    # when the callback function is invoked we know that the message has been
-#    # received and it is safe to disconnect
-#    emit('my_response',
-#         {'data': 'Disconnected!', 'count': session['receive_count']},
-#         callback=can_disconnect)
 
 
 @socketio.on('connect', namespace='/test')
@@ -297,13 +277,6 @@ def connect():
               'voting_title': vote_registration_data.voting_title,
               'fullname': saml_return_data.fullname,
               'admin_state': admin_state})
-
-
-# TODO: We could remove the user from the lists here, if we didn't remove the session-user mapping before
-#  This would allow re-registration after a disconnect
-# @socketio.on('disconnect', namespace='/test')
-# def test_disconnect():
-#    print('Client disconnected', request.sid)
 
 
 def generate_token():

@@ -1,22 +1,11 @@
 $(document).ready(function() {
     // Use a "/test" namespace.
-    // An application can open a connection on multiple namespaces, and
-    // Socket.IO will multiplex all those connections on a single
-    // physical channel. If you don't care about multiple channels, you
-    // can set the namespace to an empty string.
     namespace = '/test';
 
     // Connect to the Socket.IO server.
     // The connection URL has the following format, relative to the current page:
     //     http[s]://<domain>:<port>[/<namespace>]
-    var socket = io(namespace, {query: "token=" + secret_voting_token});
-
-    // Event handler for new connections.
-    // The callback function is invoked when a connection with the
-    // server is established.
-    //socket.on('connect', function() {
-    //    socket.emit('my_event', {data: 'I\'m connected!'});
-    //});
+    let socket = io(namespace, {query: "token=" + secret_voting_token});
 
     socket.on('register_broadcast', function(msg) {
         updateListOfUsers(msg.registered_fullnames)
@@ -32,7 +21,7 @@ $(document).ready(function() {
     });
 
     socket.on('reset_broadcast', function(msg) {
-        $("#list_of_users").html('');
+        updateListOfUsers([])
         $("#register_success").html('');
         $("#your_token").val('');
         $('#voting_title').html(msg.voting_title);
@@ -48,13 +37,13 @@ $(document).ready(function() {
     });
 
     socket.on('generated_token', function (msg) {
-        var yourToken = $('#your_token');
+        let yourToken = $('#your_token');
 	    yourToken.val(msg.token);
 
-        var votingLink = $('#voting_link');
+        let votingLink = $('#voting_link');
         votingLink.html('Copy token and open ballot box: <a href="'+msg.voting_link+'" target="_blank">'+msg.voting_link+'</a>');
 	
-	    var copyBtn = $('#copy_btn');
+	    let copyBtn = $('#copy_btn');
 	    copyBtn.click(function () {
             yourToken.select();
             if (typeof yourToken.setSelectionRange === "function") yourToken.setSelectionRange(0,9999);
@@ -99,7 +88,7 @@ $(document).ready(function() {
             list_contents += '<li>' + name + '</li>\n';
         }
         $("#admin_output_tokens").html(list_contents);
-        json_output = {
+        let json_output = {
             "users": msg.all_users,
             "tokens": msg.all_tokens
         };
@@ -114,10 +103,6 @@ $(document).ready(function() {
 	    });
         copyBtn.prop("disabled", false);
     });
-
-    // Handlers for the different forms in the page.
-    // These accept data from the user and send it to the server in a
-    // variety of ways
 
     // User controls
     $('form#voting_register').submit(function(event) {
@@ -154,7 +139,7 @@ function setControlState(registrationDisabled) {
 }
 
 function updateListOfUsers(all_users) {
-    let list_contents = ""
+    let list_contents = "";
     for (name of all_users) {
         list_contents += '<li>' + name + '</li>\n';
     }
