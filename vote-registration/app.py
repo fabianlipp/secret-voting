@@ -96,8 +96,8 @@ def acs():
             return render_template("message.html", msg="not_authenticated")
 
         attributes = auth.get_attributes()
-        saml_return_data.fullname = attributes['fullname']
-        saml_return_data.userid = attributes['userid']
+        saml_return_data.fullname = attributes['fullname'][0]
+        saml_return_data.userid = attributes['userid'][0]
         saml_return_data.votingStatus = attributes.get('is_voting', False)
         saml_return_data.adminStatus = attributes.get('is_admin', False)
         saml_return_data.presenterStatus = attributes.get('is_presenter', False)
