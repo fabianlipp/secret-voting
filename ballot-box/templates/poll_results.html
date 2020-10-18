@@ -11,12 +11,12 @@
 </head>
 <body>
 <div class="container pt-3">
-    <h1>Poll: {{ poll.label }} [{{ poll.poll_id }}]</h1>
+    <h1>Poll: {{ poll.label }}</h1>
     <h3>Summarized results</h3>
     <table class="table table-striped table-hover table-sm">
         <tr><th>Number of Votes</th><th>Option</th></tr>
     {% for option in poll_results %}
-        <tr><td>{{ option.count }}</td><td>{{ option.label }} [{{ option.answer_id }}]</td></tr>
+        <tr><td>{{ option.count }}</td><td>{{ option.label }}</td></tr>
     {% endfor %}
     </table>
 
