@@ -35,8 +35,10 @@
 <ul>
     {% for poll in active_polls %}
         <li>
-            [{{ poll.poll_id }}]
-            {{ poll.label }}
+            <a href="/{{ poll.poll_id }}">
+                [{{ poll.poll_id }}]
+                {{ poll.label }}
+            </a>
             <a href="/admin/close_poll/{{ poll.poll_id }}">Close Poll</a>
         </li>
     {% endfor %}

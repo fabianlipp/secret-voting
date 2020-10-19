@@ -15,7 +15,9 @@
     </nav>
 
     {% if msg == "create_success" %}
-        <div class="alert alert-success">Abstimmung erzeugt (ID {{ poll_id }}).</div>
+        <div class="alert alert-success">Abstimmung erzeugt (ID {{ poll_id }}).<br/>
+            <a href="/{{ poll_id }}">Link zur Abstimmung</a>
+        </div>
     {% elif msg == "poll_activated" %}
         <div class="alert alert-success">Abstimmung aktiviert (ID {{ poll_id }}).</div>
     {% elif msg == "poll_closed" %}
