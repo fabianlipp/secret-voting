@@ -16,10 +16,15 @@
     <h3>Summarized results</h3>
     <table class="table table-striped table-hover table-sm">
         <tr><th>Number of Votes</th><th>Option</th></tr>
-    {% for option in poll_results %}
+    {% for option in poll_results if option.label is not none %}
         <tr><td>{{ option.count }}</td><td>{{ option.label }}</td></tr>
     {% endfor %}
     </table>
+    {% for option in poll_results if option.label is none %}
+        <p>
+            <em>Unsubmitted ballots: {{ option.count }}</em>
+        </p>
+    {% endfor %}
 
     <h3>Individual votes</h3>
     <table class="table table-striped table-hover table-sm">
