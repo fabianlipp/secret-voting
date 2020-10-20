@@ -15,19 +15,19 @@
     <nav>
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/admin">Admin</a></li>
-        <li class="breadcrumb-item active">create</li>
+        <li class="breadcrumb-item active">{{ _('create') }}</li>
       </ol>
     </nav>
 
     <form name="new_poll" method="POST">
         <div class="input-group">
             <div class="input-group-prepend">
-                <span class="input-group-text">Label</span>
+                <span class="input-group-text">{{ _('Label') }}</span>
             </div>
             <input type="text" name="label" class="form-control">
         </div>
         <div>
-            <b>Type:</b><br>
+            <b>{{ _('Type') }}:</b><br>
             {% for name, member in poll_types %}
                 <div class="form-check">
                     <input type="radio" id="ai-{{ name }}" name="type" class="form-check-input" value="{{ name }}">
@@ -37,11 +37,11 @@
         </div>
         <div class="input-group">
             <div class="input-group-prepend">
-                <span class="input-group-text">Number of votes</span>
+                <span class="input-group-text">{{ _('Number of votes') }}</span>
             </div>
             <input type="number" name="numVotes" class="form-control" value="1">
         </div>
-        <h3>Answer Options</h3>
+        <h3>{{ _('Answer Options') }}</h3>
         <div id="answers">
             <input type="text" name="answer[]" class="form-control"><br>
         </div>

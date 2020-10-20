@@ -15,13 +15,13 @@
     <nav>
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/admin">Admin</a></li>
-        <li class="breadcrumb-item active">activate</li>
+        <li class="breadcrumb-item active">{{ _('activate') }}</li>
       </ol>
     </nav>
     <form name="activate_poll" method="POST">
-        <p>Label: {{ label }}</p>
+        <p>{{ _('Label') }}: {{ label }}</p>
         <p>ID: {{ poll_id }}</p>
-        <h3>Tokens</h3>
+        <h3>{{ _('Tokens') }}</h3>
         <textarea name="tokens" class="form-control"></textarea>
         <br><hr><br>
         <input type="submit" class="btn btn-primary" value="Activate Poll">

@@ -20,7 +20,7 @@
         <form id="vote_submit" method="POST" action="/{{ poll.poll_id }}/submit_vote">
             <div class="input-group">
                 <div class="input-group-prepend">
-                    <span class="input-group-text">Token</span>
+                    <span class="input-group-text">{{ _('Token') }}</span>
                 </div>
                 <input type="text" name="token" class="form-control" placeholder="Token" required>
             </div>

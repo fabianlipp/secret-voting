@@ -12,23 +12,23 @@
 </head>
 <body>
 <div class="container pt-3">
-    <h1>Poll: {{ poll.label }}</h1>
-    <h3>Summarized results</h3>
+    <h1>{{ _('Poll') }}: {{ poll.label }}</h1>
+    <h3>{{ _('Summarized results') }}</h3>
     <table class="table table-striped table-hover table-sm">
-        <tr><th>Number of Votes</th><th>Option</th></tr>
+        <tr><th>{{ _('Number of Votes') }}</th><th>{{ _('Option') }}</th></tr>
     {% for option in poll_results if option.label is not none %}
         <tr><td>{{ option.count }}</td><td>{{ option.label }}</td></tr>
     {% endfor %}
     </table>
     {% for option in poll_results if option.label is none %}
         <p>
-            <em>Unsubmitted ballots: {{ option.count }}</em>
+            <em>{{ _('Unsubmitted ballots') }}: {{ option.count }}</em>
         </p>
     {% endfor %}
 
-    <h3>Individual votes</h3>
+    <h3>{{ _('Individual votes') }}</h3>
     <table class="table table-striped table-hover table-sm">
-    <tr><th>Token</th>
+    <tr><th>{{ _('Token') }}</th>
     {% for option in poll_results %}
         <th>{{ option.label }}</th>
     {% endfor %}
@@ -47,7 +47,7 @@
     {% endfor %}
     </table>
 
-    <h3>Registered Participants <span class="badge badge-info">{{ poll.attendees|length }}</span></h3>
+    <h3>{{ _('Registered Participants') }} <span class="badge badge-info">{{ poll.attendees|length }}</span></h3>
     <ul>
         {% for attendee in poll.attendees %}
             <li>{{ attendee.name }}</li>

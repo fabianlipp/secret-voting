@@ -16,19 +16,19 @@
     </nav>
 
     {% if msg == "create_success" %}
-        <div class="alert alert-success">Abstimmung erzeugt (ID {{ poll_id }}).<br/>
-            <a href="/{{ poll_id }}">Link zur Abstimmung</a>
+        <div class="alert alert-success">{{ _('Poll created') }} (ID {{ poll_id }}).<br/>
+            <a href="/{{ poll_id }}">{{ _('Link to poll') }}</a>
         </div>
     {% elif msg == "poll_activated" %}
-        <div class="alert alert-success">Abstimmung aktiviert (ID {{ poll_id }}).</div>
+        <div class="alert alert-success">{{ _('Poll activated') }} (ID {{ poll_id }}).</div>
     {% elif msg == "poll_closed" %}
-        <div class="alert alert-success">Abstimmung geschlossen: ID {{ poll_id }}.</div>
+        <div class="alert alert-success">{{ _('Poll closed') }}: ID {{ poll_id }}.</div>
     {% elif msg == "poll_not_prepared" %}
-        <div class="alert alert-danger">Abstimmung nicht vorhanden oder bereits aktiv/beendet.</div>
+        <div class="alert alert-danger">{{ _('Poll not prepared') }}.</div>
     {% elif msg == "poll_activate_error" %}
-        <div class="alert alert-danger">Abstimmung konnte nicht aktiviert werden.</div>
+        <div class="alert alert-danger">{{ _('Poll could not be activated') }}.</div>
     {% else %}
-        <div class="alert alert-warning">Unbekannter Grund.</div>
+        <div class="alert alert-warning">{{ _('unknown reason') }}.</div>
     {% endif %}
 </div>
 </body>
