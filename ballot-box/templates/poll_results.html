@@ -7,18 +7,24 @@
     <script src="{{url_for('.static', filename='jquery-1.12.4.min.js')}}"></script>
     <script src="{{url_for('.static', filename='bootstrap.bundle.min.js')}}"></script>
     <script src="{{url_for('.static', filename='secret-voting.js')}}"></script>
+	<link rel="icon" type="image/svg+xml" href="{{url_for('.static', filename='favicon.svg')}}">
     <title>Secret Voting</title>
 </head>
 <body>
 <div class="container pt-3">
-    <h1>Poll: {{ poll.label }} [{{ poll.poll_id }}]</h1>
+    <h1>Poll: {{ poll.label }}</h1>
     <h3>Summarized results</h3>
     <table class="table table-striped table-hover table-sm">
         <tr><th>Number of Votes</th><th>Option</th></tr>
-    {% for option in poll_results %}
-        <tr><td>{{ option.count }}</td><td>{{ option.label }} [{{ option.answer_id }}]</td></tr>
+    {% for option in poll_results if option.label is not none %}
+        <tr><td>{{ option.count }}</td><td>{{ option.label }}</td></tr>
     {% endfor %}
     </table>
+    {% for option in poll_results if option.label is none %}
+        <p>
+            <em>Unsubmitted ballots: {{ option.count }}</em>
+        </p>
+    {% endfor %}
 
     <h3>Individual votes</h3>
     <table class="table table-striped table-hover table-sm">

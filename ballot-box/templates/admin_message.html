@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="{{url_for('.static', filename='bootstrap.min.css')}}">
+	<link rel="icon" type="image/svg+xml" href="{{url_for('.static', filename='favicon.svg')}}">
     <title>Secret Voting</title>
 </head>
 <body>
@@ -15,7 +16,9 @@
     </nav>
 
     {% if msg == "create_success" %}
-        <div class="alert alert-success">Abstimmung erzeugt (ID {{ poll_id }}).</div>
+        <div class="alert alert-success">Abstimmung erzeugt (ID {{ poll_id }}).<br/>
+            <a href="/{{ poll_id }}">Link zur Abstimmung</a>
+        </div>
     {% elif msg == "poll_activated" %}
         <div class="alert alert-success">Abstimmung aktiviert (ID {{ poll_id }}).</div>
     {% elif msg == "poll_closed" %}

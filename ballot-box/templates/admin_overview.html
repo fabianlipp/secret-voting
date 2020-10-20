@@ -7,6 +7,7 @@
     <script src="{{url_for('.static', filename='jquery-1.12.4.min.js')}}"></script>
     <script src="{{url_for('.static', filename='bootstrap.bundle.min.js')}}"></script>
     <script src="{{url_for('.static', filename='secret-voting.js')}}"></script>
+	<link rel="icon" type="image/svg+xml" href="{{url_for('.static', filename='favicon.svg')}}">
     <title>Secret Voting</title>
 </head>
 <body>
@@ -35,8 +36,10 @@
 <ul>
     {% for poll in active_polls %}
         <li>
-            [{{ poll.poll_id }}]
-            {{ poll.label }}
+            <a href="/{{ poll.poll_id }}">
+                [{{ poll.poll_id }}]
+                {{ poll.label }}
+            </a>
             <a href="/admin/close_poll/{{ poll.poll_id }}">Close Poll</a>
         </li>
     {% endfor %}
