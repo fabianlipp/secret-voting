@@ -146,11 +146,11 @@ msgstr "ungültige Kombination der Antworten"
 
 #: templates/poll_results.html:16
 msgid "Summarized results"
-msgstr ""
+msgstr "Summierte Ergebnisse"
 
 #: templates/poll_results.html:18
 msgid "Number of Votes"
-msgstr ""
+msgstr "Stimmanzahl"
 
 #: templates/poll_results.html:18
 msgid "Option"
@@ -158,13 +158,13 @@ msgstr ""
 
 #: templates/poll_results.html:25
 msgid "Unsubmitted ballots"
-msgstr ""
+msgstr "Nicht abgegebene Stimmzettel"
 
 #: templates/poll_results.html:29
 msgid "Individual votes"
-msgstr ""
+msgstr "Individuelle Abstimmungen"
 
 #: templates/poll_results.html:50
 msgid "Registered Participants"
-msgstr ""
+msgstr "Registrierte Teilnehmer"
 
