@@ -14,6 +14,10 @@ my_database = MyDatabase(os.getenv('DB_URL', 'sqlite:///./db.sqlite'))
 
 EMPTY_VOTE = 'Leerer Stimmzettel'
 
+app.config['LANGUAGES'] = [
+    'de',
+    'en'
+]
 
 @app.route('/')
 def main():
@@ -114,10 +118,14 @@ def close_poll(poll_id):
 
 @babel.localeselector
 def get_locale():
-    return request.accept_languages.best_match([
-        'de',
-        'en'
-    ])
+    return request.accept_languages.best_match(app.config['LANGUAGES'])
+
+@app.context_processor
+def inject_config_vars():
+    return dict(
+        AVAILABLE_LANGUAGES=app.config['LANGUAGES'],
+        CURRENT_LANGUAGE=request.accept_languages.best_match(app.config['LANGUAGES'])
+    )
 
 if __name__ == '__main__':
     Flask.run(app, debug=True, host="0.0.0.0")
