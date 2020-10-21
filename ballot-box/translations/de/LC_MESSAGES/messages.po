@@ -1,0 +1,170 @@
+# German translations for PROJECT.
+# Copyright (C) 2020 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2020-10-20 08:02+0200\n"
+"PO-Revision-Date: 2020-10-19 18:28+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: de\n"
+"Language-Team: de <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.8.0\n"
+
+#: templates/admin_activate_poll.html:18
+msgid "activate"
+msgstr "aktivieren"
+
+#: templates/admin_activate_poll.html:22 templates/admin_new_poll.html:25
+msgid "Label"
+msgstr ""
+
+#: templates/admin_activate_poll.html:24
+msgid "Tokens"
+msgstr ""
+
+#: templates/admin_message.html:19
+msgid "Poll created"
+msgstr "Abstimmung erzeugt"
+
+#: templates/admin_message.html:20
+msgid "Link to poll"
+msgstr "Link zur Abstimmung"
+
+#: templates/admin_message.html:23
+msgid "Poll activated"
+msgstr "Abstimmung aktiviert"
+
+#: templates/admin_message.html:25
+msgid "Poll closed"
+msgstr "Abstimmung geschlossen"
+
+#: templates/admin_message.html:27
+msgid "Poll not prepared"
+msgstr "Abstimmung nicht vorhanden oder bereits aktiv/beendet"
+
+#: templates/admin_message.html:29
+msgid "Poll could not be activated"
+msgstr "Abstimmung konnte nicht aktiviert werden"
+
+#: templates/admin_message.html:31 templates/message.html:27
+msgid "unknown reason"
+msgstr "unbekannter Fehler"
+
+#: templates/admin_new_poll.html:18
+msgid "create"
+msgstr "neu"
+
+#: templates/admin_new_poll.html:30
+msgid "Type"
+msgstr "Typ"
+
+#: templates/admin_new_poll.html:40 templates/index.html:19
+msgid "Number of votes"
+msgstr "Anzahl der möglichen Stimmen"
+
+#: templates/admin_new_poll.html:44
+msgid "Answer Options"
+msgstr "Stimmoptionen"
+
+#: templates/admin_overview.html:18
+msgid "Overview"
+msgstr "Übersicht"
+
+#: templates/admin_overview.html:21 templates/admin_overview.html:22
+msgid "New poll"
+msgstr "neue Abstimmung"
+
+#: templates/admin_overview.html:24
+msgid "Prepared polls"
+msgstr "angelegte Abstimmungen"
+
+#: templates/admin_overview.html:30
+msgid "Activate Poll"
+msgstr "Abstimmung aktivieren"
+
+#: templates/admin_overview.html:35
+msgid "Active polls"
+msgstr "aktive Abstimmungen"
+
+#: templates/admin_overview.html:43
+msgid "Close Poll"
+msgstr "Abstimmung beenden"
+
+#: templates/admin_overview.html:48
+msgid "Closed polls"
+msgstr "beendete Abstimmungen"
+
+#: templates/index.html:17
+msgid "Ballot Box"
+msgstr "Stimmabgabe"
+
+#: templates/index.html:18 templates/poll_results.html:15
+msgid "Poll"
+msgstr "Abstimmung"
+
+#: templates/index.html:23 templates/poll_results.html:31
+msgid "Token"
+msgstr ""
+
+#: templates/message.html:15 templates/message.html:17
+#: templates/message.html:19 templates/message.html:23
+#: templates/message.html:25
+msgid "Error"
+msgstr "Fehler"
+
+#: templates/message.html:15
+msgid "URL incomplete"
+msgstr "URL nicht gefunden"
+
+#: templates/message.html:17
+msgid "Voting is not active"
+msgstr "Abstimmung nicht aktiv"
+
+#: templates/message.html:19
+msgid "Token is invalid"
+msgstr "Token ist ungültig"
+
+#: templates/message.html:21
+msgid "Vote was registered"
+msgstr "Abstimmung erfolgreich registriert"
+
+#: templates/message.html:23
+msgid "Too many ticks. Vote was not registered"
+msgstr "Zu viele Antworten. Abstimmung wurde nicht registriert"
+
+#: templates/message.html:25
+msgid "Invalid combination of ticks"
+msgstr "ungültige Kombination der Antworten"
+
+#: templates/poll_results.html:16
+msgid "Summarized results"
+msgstr "Summierte Ergebnisse"
+
+#: templates/poll_results.html:18
+msgid "Number of Votes"
+msgstr "Stimmanzahl"
+
+#: templates/poll_results.html:18
+msgid "Option"
+msgstr ""
+
+#: templates/poll_results.html:25
+msgid "Unsubmitted ballots"
+msgstr "Nicht abgegebene Stimmzettel"
+
+#: templates/poll_results.html:29
+msgid "Individual votes"
+msgstr "Individuelle Abstimmungen"
+
+#: templates/poll_results.html:50
+msgid "Registered Participants"
+msgstr "Registrierte Teilnehmer"
+

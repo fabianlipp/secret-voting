@@ -10,6 +10,29 @@ cp vote-registration/settings.json{.tpl,}
 docker-compose build && docker-compose up -d
 ```
 
+## Localization
+
+Translate text via Babel. To translate a string within the html templates, use ```{{ _('Text to translate') }}```.
+
+Execute these commands in the subfolder ballot-box / vote-registration if new strings to translate are added:
+
+- Extracting message strings from html files:
+
+    ```pybabel extract -F babel.cfg -k _l -o messages.pot .```
+ 
+- Create a new german messages.po from general messages (**overwrites** existing translations)
+
+    ```pybabel init -i messages.pot -d translations -l de```
+
+- Update german messages.po from general messages
+
+    ```pybabel update -i messages.pot -d translations```
+
+- Compile translations to .mo
+
+    ```pybabel compile -d translations```
+
+
 # Vote Registration
 
 ## Configuration

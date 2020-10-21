@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{CURRENT_LANGUAGE}}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -15,24 +15,24 @@
 <nav>
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="/admin">Admin</a></li>
-    <li class="breadcrumb-item active">Overview</li>
+    <li class="breadcrumb-item active">{{ _('Overview') }}</li>
   </ol>
 </nav>
-<h3>New poll</h3>
-    <a href="/admin/new_poll">New poll</a>
+<h3>{{ _('New poll') }}</h3>
+    <a href="/admin/new_poll">{{ _('New poll') }}</a>
 
-<h3>Prepared polls</h3>
+<h3>{{ _('Prepared polls') }}</h3>
 <ul>
     {% for poll in prepared_polls %}
         <li>
             [{{ poll.poll_id }}]
             {{ poll.label }}
-            <a href="/admin/activate_poll/{{ poll.poll_id }}">Activate Poll</a>
+            <a href="/admin/activate_poll/{{ poll.poll_id }}">{{ _('Activate Poll') }}</a>
         </li>
     {% endfor %}
 </ul>
 
-<h3>Active polls</h3>
+<h3>{{ _('Active polls') }}</h3>
 <ul>
     {% for poll in active_polls %}
         <li>
@@ -40,12 +40,12 @@
                 [{{ poll.poll_id }}]
                 {{ poll.label }}
             </a>
-            <a href="/admin/close_poll/{{ poll.poll_id }}">Close Poll</a>
+            <a href="/admin/close_poll/{{ poll.poll_id }}">{{ _('Close Poll') }}</a>
         </li>
     {% endfor %}
 </ul>
 
-<h3>Closed polls</h3>
+<h3>{{ _('Closed polls') }}</h3>
 <ul>
     {% for poll in closed_polls %}
         <li>
