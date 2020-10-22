@@ -4,6 +4,7 @@
 /ballot-box/static/bootstrap*
 /ballot-box/static/jquery*
 /docker-compose.yml
+/mariadb
 /vote-registration/certs/*
 !/vote-registration/certs/README.md
 /vote-registration/settings.json
