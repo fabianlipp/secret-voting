@@ -1,17 +1,5 @@
-<!DOCTYPE html>
-<html lang="{{CURRENT_LANGUAGE}}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="{{url_for('.static', filename='bootstrap.min.css')}}">
-    <script src="{{url_for('.static', filename='jquery-1.12.4.min.js')}}"></script>
-    <script src="{{url_for('.static', filename='bootstrap.bundle.min.js')}}"></script>
-    <script src="{{url_for('.static', filename='secret-voting.js')}}"></script>
-	<link rel="icon" type="image/svg+xml" href="{{url_for('.static', filename='favicon.svg')}}">
-    <title>Secret Voting</title>
-</head>
-<body>
-<div class="container pt-3">
+{% extends "base.html" %}
+{% block content %}
     <h1>{{ _('Poll') }}: {{ poll.label }}</h1>
     <h3>{{ _('Summarized results') }}</h3>
     <table class="table table-striped table-hover table-sm">
@@ -53,6 +41,4 @@
             <li>{{ attendee.name }}</li>
         {% endfor %}
     </ul>
-</div>
-</body>
-</html>
+{% endblock %}

@@ -1,14 +1,5 @@
-<!DOCTYPE html>
-<html lang="{{CURRENT_LANGUAGE}}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="{{url_for('.static', filename='bootstrap.min.css')}}">
-	<link rel="icon" type="image/svg+xml" href="{{url_for('.static', filename='favicon.svg')}}">
-    <title>Secret Voting</title>
-</head>
-<body>
-<div class="container pt-3">
+{% extends "base.html" %}
+{% block content %}
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/admin">Admin</a></li>
@@ -30,6 +21,4 @@
     {% else %}
         <div class="alert alert-warning">{{ _('unknown reason') }}.</div>
     {% endif %}
-</div>
-</body>
-</html>
+{% endblock %}
