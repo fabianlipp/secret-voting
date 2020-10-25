@@ -8,13 +8,21 @@ from urllib.parse import urlparse
 
 from flask import Flask, make_response, redirect, render_template, request
 from flask_socketio import SocketIO, emit, close_room, disconnect
+from flask_babel import Babel
 from onelogin.saml2.auth import OneLogin_Saml2_Auth
 
-
 app = Flask(__name__)
+
 SAML_CONFIG_DIRECTORY = os.path.dirname(os.path.abspath(__file__))
 # async_mode=None leaves it to the application to choose the best option based on installed packages.
 socketio = SocketIO(app, async_mode=None)
+
+babel = Babel(app)
+
+app.config['LANGUAGES'] = [
+    'de',
+    'en'
+]
 
 admins = []
 session_userids = {}
@@ -288,6 +296,16 @@ def generate_display_token():
     letters_and_digits = string.ascii_letters + string.digits
     return ''.join(random.choice(letters_and_digits) for _ in range(8))
 
+@babel.localeselector
+def get_locale():
+    return request.accept_languages.best_match(app.config['LANGUAGES'])
+
+@app.context_processor
+def inject_config_vars():
+    return dict(
+        AVAILABLE_LANGUAGES=app.config['LANGUAGES'],
+        CURRENT_LANGUAGE=request.accept_languages.best_match(app.config['LANGUAGES'])
+    )
 
 if __name__ == '__main__':
     socketio.run(app, debug=True, host="0.0.0.0", port=5001)
