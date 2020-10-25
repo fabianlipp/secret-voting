@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{CURRENT_LANGUAGE}}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -12,63 +13,67 @@
         const secret_voting_token = "{{ token }}";
         window.history.pushState(null, null, "/admin");
     </script>
-	<link rel="icon" type="image/svg+xml" href="{{url_for('.static', filename='favicon.svg')}}">
-    <title>Admin Vote Registration / Secret Voting</title>
+    <link rel="icon" type="image/svg+xml" href="{{url_for('.static', filename='favicon.svg')}}">
+    <title>{{ _('Admin Vote Registration') }} | Secret Voting</title>
 </head>
+
 <body>
     <div class="container pt-3">
-        <h1>Secret Voting | Vote Registration</h1>
+        <h1>{{ _('Admin Vote Registration') }}</h1>
         {% if local_mode %}
-          <div class="alert alert-danger"><b>Warning:</b> Local mode active!</div>
+        <div class="alert alert-danger"><b>{{ _('Warning') }}:</b> {{ _('Local mode active') }}!</div>
         {% endif %}
         <div class="row">
             <div class="col-6">
-                <h3>Voting Administration:</h3>
+                <h3>{{ _('Voting Administration') }}:</h3>
                 <form id="voting_start" method="POST" action='#'>
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Voting title:</span>
-                    </div>
-                    <input type="text" id="voting_title" class="form-control">
-                </div><br>
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Voting link:</span>
-                    </div>
-                    <input type="text" id="voting_link" class="form-control">
-                </div><br>
-                <input type="submit" class="btn btn-primary" value="Start Voting">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">{{ _('Voting title') }}:</span>
+                        </div>
+                        <input type="text" id="voting_title" class="form-control">
+                    </div><br>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">{{ _('Voting link') }}:</span>
+                        </div>
+                        <input type="text" id="voting_link" class="form-control">
+                    </div><br>
+                    <input type="submit" class="btn btn-primary" value="Start Voting">
                 </form>
-                <br><hr><br>
+                <br>
+                <hr><br>
                 <form id="voting_end" method="POST" action='#'>
-                <input type="submit" class="btn btn-primary" value="End and generate tokens">
+                    <input type="submit" class="btn btn-primary" value="{{ _('End and generate tokens') }}">
                 </form>
-                <br><hr><br>
+                <br>
+                <hr><br>
                 <div class="input-group">
                     <textarea id="admin_output_json" class="form-control"></textarea><br>
-		            <span class="input-group-append">
+                    <span class="input-group-append">
                         <input type="button" id="copy_btn" class="btn btn-primary" value="copy" disabled>
                     </span>
-		        </div>
+                </div>
             </div>
             <div class="col-6">
-                <h3>Tokens:</h3>
+                <h3>{{ _('Tokens') }}:</h3>
                 <ul id="admin_output_tokens"></ul>
-                <h3>Names:</h3>
+                <h3>{{ _('Names') }}:</h3>
                 <ul id="admin_output_names"></ul>
-                <h3>Registered Users: <span id="num_of_users" class="badge badge-info">0</span></h3>
+                <h3>{{ _('Registered Users') }}: <span id="num_of_users" class="badge badge-info">0</span></h3>
                 <ul id="list_of_users"></ul>
             </div>
         </div>
         <div class="row pt-3 text-right">
             <hr><br>
             <p class="text-muted small">
-                Async mode is: <b>{{ async_mode }}</b> | 
-                Server connection state: <b id="connection_state"></b> | 
-                Admin state: <b id="admin_state"></b> | 
+                Async mode is: <b>{{ async_mode }}</b> |
+                Server connection state: <b id="connection_state"></b> |
+                Admin state: <b id="admin_state"></b> |
                 Current state: <b id="state"></b>
             </p>
         </div>
     </div>
 </body>
+
 </html>

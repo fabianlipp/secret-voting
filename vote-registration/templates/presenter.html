@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{CURRENT_LANGUAGE}}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -12,18 +13,19 @@
         const secret_voting_token = "{{ token }}";
         window.history.pushState(null, null, "/presenter");
     </script>
-	<link rel="icon" type="image/svg+xml" href="{{url_for('.static', filename='favicon.svg')}}">
-    <title>Presenter Vote Registration / Secret Voting</title>
+    <link rel="icon" type="image/svg+xml" href="{{url_for('.static', filename='favicon.svg')}}">
+    <title>{{ _('Presenter Vote Registration') }} | Secret Voting</title>
 </head>
+
 <body>
     <div class="container pt-3">
-        <h1>Secret Voting | Vote Registration</h1>
+        <h1>{{ _('Presenter Vote Registration') }}</h1>
         {% if local_mode %}
-            <div class="alert alert-danger"><b>Warning:</b> Local mode active!</div>
+        <div class="alert alert-danger"><b>{{ _('Warning') }}:</b> {{ _('Local mode active') }}!</div>
         {% endif %}
         <div class="row">
             <div class="col-6">
-                <h3>Registered Users: <span id="num_of_users" class="badge badge-info">0</span></h3>
+                <h3>{{ _('Registered Users') }}: <span id="num_of_users" class="badge badge-info">0</span></h3>
                 <ul id="list_of_users"></ul>
             </div>
         </div>
@@ -38,4 +40,5 @@
         </div>
     </div>
 </body>
+
 </html>

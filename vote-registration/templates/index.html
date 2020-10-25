@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
-<html lang="en">
+<html lang="{{CURRENT_LANGUAGE}}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -11,55 +12,59 @@
     <script type="text/javascript">
         const secret_voting_token = "{{ token }}";
     </script>
-	<link rel="icon" type="image/svg+xml" href="{{url_for('.static', filename='favicon.svg')}}">
-    <title>Secret Voting</title>
+    <link rel="icon" type="image/svg+xml" href="{{url_for('.static', filename='favicon.svg')}}">
+    <title>{{ _('Vote Registration') }} | Secret Voting</title>
 </head>
+
 <body>
     <div class="container pt-3">
-        <h1>Secret Voting | Vote Registration</h1>
+        <h1>{{ _('Vote Registration') }}</h1>
         {% if local_mode %}
-            <div class="alert alert-danger"><b>Warning:</b> Local mode active!</div>
+        <div class="alert alert-danger"><b>{{ _('Warning') }}:</b> {{ _('Local mode active') }}!</div>
         {% endif %}
         <div class="row">
-	        <div class="col-6">
-                <h2>Voting: <span id="voting_title"></span></h2>
+            <div class="col-6">
+                <h2>{{ _('Voting') }}: <span id="voting_title"></span></h2>
                 <form id="voting_register" method="POST" action='#'>
                     <div class="input-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">Your name: </span>
+                            <span class="input-group-text">{{ _('Your name') }}: </span>
                         </div>
                         <input type="text" id="fullname" class="form-control" value="" readonly>
                     </div>
                     <br>
-                    <input type="submit" id="register_btn" class="btn btn-primary" value="Register for voting" disabled><br>
+                    <input type="submit" id="register_btn" class="btn btn-primary"
+                        value="{{ _('Register for voting') }}" disabled><br>
                     <span id="register_success"></span>
                 </form>
-		        <hr>
-                <h3>Your token:</h3>
-		        <div class="input-group">
-                    <input type="text" id="your_token" class="form-control text-monospace notranslate" placeholder="Not generated yet." translate="no" readonly>
-		            <span class="input-group-append">
+                <hr>
+                <h3>{{ _('Your token') }}:</h3>
+                <div class="input-group">
+                    <input type="text" id="your_token" class="form-control text-monospace notranslate"
+                        placeholder="{{ _('Not generated yet') }}." translate="no" readonly>
+                    <span class="input-group-append">
                         <input type="button" id="copy_btn" class="btn btn-primary" value="copy" disabled>
                     </span>
-		        </div><br>
-		        <span id="voting_link"></span>
+                </div><br>
+                <span id="voting_link"></span>
             </div>
             <div class="col-6">
-                <h3>Registered Users: <span id="num_of_users" class="badge badge-info">0</span></h3>
+                <h3>{{ _('Registered Users') }}: <span id="num_of_users" class="badge badge-info">0</span></h3>
                 <ul id="list_of_users"></ul>
             </div>
-	    </div>
-	    <div class="row">
+        </div>
+        <div class="row">
 
-	    </div>
-	    <div class="row text-right">
+        </div>
+        <div class="row text-right">
             <hr><br>
             <p class="text-muted small">
-                Async mode: <b>{{ async_mode }}</b> | 
-                Server connection state: <b id="connection_state"></b> | 
+                Async mode: <b>{{ async_mode }}</b> |
+                Server connection state: <b id="connection_state"></b> |
                 Current state: <b id="state"></b>
             </p>
-	    </div>
+        </div>
     </div>
 </body>
+
 </html>
