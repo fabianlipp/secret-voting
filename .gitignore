@@ -12,4 +12,5 @@
 /vote-registration/static/jquery*
 /vote-registration/static/socket*
 /venv/
+*.mo
 
