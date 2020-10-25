@@ -56,7 +56,7 @@ msgstr "Namen"
 
 #: templates/admin.html:63 templates/index.html:52 templates/presenter.html:28
 msgid "Registered Users"
-msgstr "Registrierte Wähler:"
+msgstr "Registrierte Wähler"
 
 #: templates/index.html:16 templates/index.html:21
 msgid "Vote Registration"
@@ -68,7 +68,7 @@ msgstr "Wahlgang"
 
 #: templates/index.html:31
 msgid "Your name"
-msgstr "Dein Name:"
+msgstr "Dein Name"
 
 #: templates/index.html:37
 msgid "Register for voting"
@@ -80,7 +80,7 @@ msgstr "Dein Token"
 
 #: templates/index.html:43
 msgid "Not generated yet"
-msgstr "NOch nicht erzeugt"
+msgstr "Noch nicht erzeugt"
 
 #: templates/local.html:11 templates/local.html:17
 msgid "Local Mode"
