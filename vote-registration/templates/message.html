@@ -1,27 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{CURRENT_LANGUAGE}}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="{{url_for('.static', filename='bootstrap.min.css')}}">
-	<link rel="icon" type="image/svg+xml" href="{{url_for('.static', filename='favicon.svg')}}">
+    <link rel="icon" type="image/svg+xml" href="{{url_for('.static', filename='favicon.svg')}}">
     <title>Secret Voting</title>
 </head>
+
 <body>
-<div class="container pt-3">
-    <div class="alert alert-danger"><b>Error:</b> 
-{% if msg == "not_authenticated" %}
-    SAML Login invalid.
-{% elif msg == "no_voting_permissions" %}
-    No voting permissions.
-{% elif msg == "no_admin_permissions" %}
-    No admin permissions.
-{% elif msg == "no_presenter_permissions" %}
-    No presenter permissions.
-{% else %}
-    Unbekannter Grund.
-{% endif %}
+    <div class="container pt-3">
+        <div class="alert alert-danger"><b>{{ _('Error') }}:</b>
+            {% if msg == "not_authenticated" %}
+            {{ _('SAML Login invalid') }}.
+            {% elif msg == "no_voting_permissions" %}
+            {{ _('No voting permissions') }}.
+            {% elif msg == "no_admin_permissions" %}
+            {{ _('No admin permissions') }}.
+            {% elif msg == "no_presenter_permissions" %}
+            {{ _('No presenter permissions') }}.
+            {% else %}
+            {{ _('unknown reason') }}.
+            {% endif %}
+        </div>
     </div>
-</div>
 </body>
+
 </html>
