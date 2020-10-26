@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: commit d091a53\n"
 "Report-Msgid-Bugs-To: git@tmaex.de\n"
 "POT-Creation-Date: 2020-10-22 08:36+0200\n"
-"PO-Revision-Date: 2020-10-26 16:08+0100\n"
+"PO-Revision-Date: 2020-10-26 19:36+0100\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,7 +20,6 @@ msgstr ""
 "Language: fr\n"
 
 #: templates/admin.html:17 templates/admin.html:22
-#, fuzzy
 msgid "Admin Vote Registration"
 msgstr "Inscription au vote de l’administrateur"
 
@@ -29,27 +28,22 @@ msgid "Warning"
 msgstr "Avertissement"
 
 #: templates/admin.html:24 templates/index.html:23 templates/presenter.html:24
-#, fuzzy
 msgid "Local mode active"
 msgstr "Mode local actif"
 
 #: templates/admin.html:28
-#, fuzzy
 msgid "Voting Administration"
 msgstr "Administration du vote"
 
 #: templates/admin.html:32
-#, fuzzy
 msgid "Voting title"
 msgstr "Titre de vote"
 
 #: templates/admin.html:38
-#, fuzzy
 msgid "Voting link"
 msgstr "Lien de vote"
 
 #: templates/admin.html:47
-#, fuzzy
 msgid "End and generate tokens"
 msgstr "Terminer et générer des jetons"
 
@@ -66,7 +60,6 @@ msgid "Registered Users"
 msgstr "Utilisateurs enregistrés"
 
 #: templates/index.html:16 templates/index.html:21
-#, fuzzy
 msgid "Vote Registration"
 msgstr "Inscription au vote"
 
@@ -79,12 +72,10 @@ msgid "Your name"
 msgstr "Votre nom"
 
 #: templates/index.html:37
-#, fuzzy
 msgid "Register for voting"
 msgstr "Inscrivez-vous pour voter"
 
 #: templates/index.html:41
-#, fuzzy
 msgid "Your token"
 msgstr "Votre jeton"
 
@@ -93,7 +84,6 @@ msgid "Not generated yet"
 msgstr "Pas encore généré"
 
 #: templates/local.html:11 templates/local.html:17
-#, fuzzy
 msgid "Local Mode"
 msgstr "Local Mode"
 
@@ -106,22 +96,18 @@ msgid "UserID"
 msgstr "Identifiant d'utilisateur"
 
 #: templates/local.html:26
-#, fuzzy
 msgid "is voting"
-msgstr "est vote"
+msgstr "est électeur"
 
 #: templates/local.html:30
-#, fuzzy
 msgid "is admin"
 msgstr "est admin"
 
 #: templates/local.html:34
-#, fuzzy
 msgid "is presenter"
 msgstr "est présentateur"
 
 #: templates/local.html:37
-#, fuzzy
 msgid "Join with this user"
 msgstr "Joignez-vous à cet utilisateur"
 
@@ -130,30 +116,25 @@ msgid "Error"
 msgstr "Erreur"
 
 #: templates/message.html:16
-#, fuzzy
 msgid "SAML Login invalid"
 msgstr "SAML Login non valide"
 
 #: templates/message.html:18
-#, fuzzy
 msgid "No voting permissions"
 msgstr "Pas d’autorisations de vote"
 
 #: templates/message.html:20
-#, fuzzy
 msgid "No admin permissions"
-msgstr "Pas d’autorisations d’administrateur"
+msgstr "Les droits d'accès à l'administration font défaut"
 
 #: templates/message.html:22
-#, fuzzy
 msgid "No presenter permissions"
-msgstr "Pas d’autorisations de présentateur"
+msgstr "Es droits de presentation font défaut"
 
 #: templates/message.html:24
 msgid "unknown reason"
 msgstr "raison inconnue"
 
 #: templates/presenter.html:17 templates/presenter.html:22
-#, fuzzy
 msgid "Presenter Vote Registration"
 msgstr "Inscription au vote des présentateurs"
