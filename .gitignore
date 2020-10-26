@@ -1,6 +1,7 @@
 /.idea/
+.vscode
 /.vimrc
-/__pycache__/
+**/__pycache__/
 /ballot-box/static/bootstrap*
 /ballot-box/static/jquery*
 /docker-compose.yml
@@ -13,4 +14,4 @@
 /vote-registration/static/socket*
 /venv/
 *.mo
-
+*.sqlite
