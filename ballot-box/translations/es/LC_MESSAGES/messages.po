@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: commit d091a53\n"
 "Report-Msgid-Bugs-To: git@tmaex.de\n"
 "POT-Creation-Date: 2020-10-20 08:02+0200\n"
-"PO-Revision-Date: 2020-10-25 22:29+0100\n"
+"PO-Revision-Date: 2020-10-26 19:38+0100\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -32,37 +32,30 @@ msgid "Tokens"
 msgstr "Tokens"
 
 #: templates/admin_message.html:19
-#, fuzzy
 msgid "Poll created"
 msgstr "Encuesta creada"
 
 #: templates/admin_message.html:20
-#, fuzzy
 msgid "Link to poll"
 msgstr "Enlace a la encuesta"
 
 #: templates/admin_message.html:23
-#, fuzzy
 msgid "Poll activated"
 msgstr "Encuesta activada"
 
 #: templates/admin_message.html:25
-#, fuzzy
 msgid "Poll closed"
 msgstr "Encuesta cerrada"
 
 #: templates/admin_message.html:27
-#, fuzzy
 msgid "Poll not prepared"
 msgstr "Encuesta no preparada"
 
 #: templates/admin_message.html:29
-#, fuzzy
 msgid "Poll could not be activated"
 msgstr "No se pudo activar la encuesta"
 
 #: templates/admin_message.html:31 templates/message.html:27
-#, fuzzy
 msgid "unknown reason"
 msgstr "razón desconocida"
 
@@ -87,17 +80,14 @@ msgid "Overview"
 msgstr "Resumen"
 
 #: templates/admin_overview.html:21 templates/admin_overview.html:22
-#, fuzzy
 msgid "New poll"
 msgstr "Nueva encuesta"
 
 #: templates/admin_overview.html:24
-#, fuzzy
 msgid "Prepared polls"
 msgstr "Encuestas preparadas"
 
 #: templates/admin_overview.html:30
-#, fuzzy
 msgid "Activate Poll"
 msgstr "Activar encuesta"
 
@@ -106,7 +96,6 @@ msgid "Active polls"
 msgstr "Encuestas activas"
 
 #: templates/admin_overview.html:43
-#, fuzzy
 msgid "Close Poll"
 msgstr "Cerrar encuesta"
 
@@ -115,7 +104,6 @@ msgid "Closed polls"
 msgstr "Sondage fermé"
 
 #: templates/index.html:17
-#, fuzzy
 msgid "Ballot Box"
 msgstr "Urna"
 
@@ -138,17 +126,14 @@ msgid "URL incomplete"
 msgstr "URL incompleta"
 
 #: templates/message.html:17
-#, fuzzy
 msgid "Voting is not active"
 msgstr "La votación no está activa"
 
 #: templates/message.html:19
-#, fuzzy
 msgid "Token is invalid"
 msgstr "El token no es válido"
 
 #: templates/message.html:21
-#, fuzzy
 msgid "Vote was registered"
 msgstr "El voto fue registrado"
 
@@ -157,12 +142,10 @@ msgid "Too many ticks. Vote was not registered"
 msgstr "Demasiadas Casillas marcadas. El voto no fue registrado"
 
 #: templates/message.html:25
-#, fuzzy
 msgid "Invalid combination of ticks"
-msgstr "Combinación no válida de ticks"
+msgstr "Combinación invalida de casillas"
 
 #: templates/poll_results.html:16
-#, fuzzy
 msgid "Summarized results"
 msgstr "Resultados resumidos"
 
