@@ -1,12 +1,12 @@
 # Translations template for PROJECT.
 # Copyright (C) 2020 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
+# Maximilian Kroth <git@tmaex.de>, 2020.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PROJECT VERSION\n"
-"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"Project-Id-Version: commit d091a53\n"
+"Report-Msgid-Bugs-To: git@tmaex.de\n"
 "POT-Creation-Date: 2020-10-22 08:36+0200\n"
 "PO-Revision-Date: 2020-10-25 22:43+0100\n"
 "Language-Team: \n"
