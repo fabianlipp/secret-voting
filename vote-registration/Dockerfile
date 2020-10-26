@@ -6,6 +6,7 @@ RUN apk add --no-cache libxml2-dev xmlsec-dev \
  && pip install gunicorn \
  && apk del .build-deps
 COPY . /app
+RUN cd /app && pybabel compile -d translations
 WORKDIR /app
 EXPOSE 80
 CMD gunicorn -w1 --bind=0.0.0.0:80 app:app --worker-class eventlet

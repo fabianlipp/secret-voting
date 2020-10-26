@@ -3,14 +3,21 @@ import os
 from typing import List
 
 from flask import Flask, request, render_template
+from flask_babel import Babel
 from db import my_session_scope, MyDatabase, MyDatabaseSession, Poll, Vote, PollState, PollType, AnswerOption
 
 app = Flask(__name__)
+
+babel = Babel(app)
 
 my_database = MyDatabase(os.getenv('DB_URL', 'sqlite:///./db.sqlite'))
 
 EMPTY_VOTE = 'Leerer Stimmzettel'
 
+app.config['LANGUAGES'] = [
+    'de',
+    'en'
+]
 
 @app.route('/')
 def main():
@@ -109,6 +116,16 @@ def close_poll(poll_id):
         session.close_poll(poll_id)
         return render_template('admin_message.html', msg="poll_closed", poll_id=poll_id)
 
+@babel.localeselector
+def get_locale():
+    return request.accept_languages.best_match(app.config['LANGUAGES'])
+
+@app.context_processor
+def inject_config_vars():
+    return dict(
+        AVAILABLE_LANGUAGES=app.config['LANGUAGES'],
+        CURRENT_LANGUAGE=request.accept_languages.best_match(app.config['LANGUAGES'])
+    )
 
 if __name__ == '__main__':
     Flask.run(app, debug=True, host="0.0.0.0")
