@@ -5,7 +5,10 @@ $(document).ready(function() {
     // Connect to the Socket.IO server.
     // The connection URL has the following format, relative to the current page:
     //     http[s]://<domain>:<port>[/<namespace>]
-    let socket = io(namespace, {query: "token=" + secret_voting_token});
+    let socket;
+    if (typeof secret_voting_token !== 'undefined') {
+        socket = io(namespace, {query: "token=" + secret_voting_token});
+    }
 
     socket.on('register_broadcast', function(msg) {
         updateListOfUsers(msg.registered_fullnames)
