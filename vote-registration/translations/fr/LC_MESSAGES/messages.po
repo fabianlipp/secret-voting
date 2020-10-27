@@ -1,0 +1,140 @@
+# Translations template for PROJECT.
+# Copyright (C) 2020 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# Maximilian Kroth <git@tmaex.de>, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: commit d091a53\n"
+"Report-Msgid-Bugs-To: git@tmaex.de\n"
+"POT-Creation-Date: 2020-10-22 08:36+0200\n"
+"PO-Revision-Date: 2020-10-26 19:36+0100\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.8.0\n"
+"X-Generator: Poedit 2.4.1\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: fr\n"
+
+#: templates/admin.html:17 templates/admin.html:22
+msgid "Admin Vote Registration"
+msgstr "Inscription au vote de l’administrateur"
+
+#: templates/admin.html:24 templates/index.html:23 templates/presenter.html:24
+msgid "Warning"
+msgstr "Avertissement"
+
+#: templates/admin.html:24 templates/index.html:23 templates/presenter.html:24
+msgid "Local mode active"
+msgstr "Mode local actif"
+
+#: templates/admin.html:28
+msgid "Voting Administration"
+msgstr "Administration du vote"
+
+#: templates/admin.html:32
+msgid "Voting title"
+msgstr "Titre de vote"
+
+#: templates/admin.html:38
+msgid "Voting link"
+msgstr "Lien de vote"
+
+#: templates/admin.html:47
+msgid "End and generate tokens"
+msgstr "Terminer et générer des jetons"
+
+#: templates/admin.html:59
+msgid "Tokens"
+msgstr "Jetons"
+
+#: templates/admin.html:61
+msgid "Names"
+msgstr "Noms"
+
+#: templates/admin.html:63 templates/index.html:52 templates/presenter.html:28
+msgid "Registered Users"
+msgstr "Utilisateurs enregistrés"
+
+#: templates/index.html:16 templates/index.html:21
+msgid "Vote Registration"
+msgstr "Inscription au vote"
+
+#: templates/index.html:27
+msgid "Voting"
+msgstr "Vote"
+
+#: templates/index.html:31
+msgid "Your name"
+msgstr "Votre nom"
+
+#: templates/index.html:37
+msgid "Register for voting"
+msgstr "Inscrivez-vous pour voter"
+
+#: templates/index.html:41
+msgid "Your token"
+msgstr "Votre jeton"
+
+#: templates/index.html:43
+msgid "Not generated yet"
+msgstr "Pas encore généré"
+
+#: templates/local.html:11 templates/local.html:17
+msgid "Local Mode"
+msgstr "Local Mode"
+
+#: templates/local.html:22
+msgid "Fullname"
+msgstr "Nom complet"
+
+#: templates/local.html:23
+msgid "UserID"
+msgstr "Identifiant d'utilisateur"
+
+#: templates/local.html:26
+msgid "is voting"
+msgstr "est électeur"
+
+#: templates/local.html:30
+msgid "is admin"
+msgstr "est admin"
+
+#: templates/local.html:34
+msgid "is presenter"
+msgstr "est présentateur"
+
+#: templates/local.html:37
+msgid "Join with this user"
+msgstr "Joignez-vous à cet utilisateur"
+
+#: templates/message.html:14
+msgid "Error"
+msgstr "Erreur"
+
+#: templates/message.html:16
+msgid "SAML Login invalid"
+msgstr "SAML Login non valide"
+
+#: templates/message.html:18
+msgid "No voting permissions"
+msgstr "Pas d’autorisations de vote"
+
+#: templates/message.html:20
+msgid "No admin permissions"
+msgstr "Les droits d'accès à l'administration font défaut"
+
+#: templates/message.html:22
+msgid "No presenter permissions"
+msgstr "Es droits de presentation font défaut"
+
+#: templates/message.html:24
+msgid "unknown reason"
+msgstr "raison inconnue"
+
+#: templates/presenter.html:17 templates/presenter.html:22
+msgid "Presenter Vote Registration"
+msgstr "Inscription au vote des présentateurs"
