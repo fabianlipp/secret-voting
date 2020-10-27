@@ -16,7 +16,9 @@ EMPTY_VOTE = 'Leerer Stimmzettel'
 
 app.config['LANGUAGES'] = [
     'de',
-    'en'
+    'en',
+    'es',
+    'fr'
 ]
 
 @app.route('/')

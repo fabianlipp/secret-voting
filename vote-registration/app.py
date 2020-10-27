@@ -21,7 +21,9 @@ babel = Babel(app)
 
 app.config['LANGUAGES'] = [
     'de',
-    'en'
+    'en',
+    'es',
+    'fr'
 ]
 
 admins = []
