@@ -8,162 +8,161 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-10-20 08:02+0200\n"
+"POT-Creation-Date: 2020-10-27 01:42+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.8.0\n"
+"Generated-By: Babel 2.6.0\n"
 
-#: templates/admin_activate_poll.html:18
+#: templates/admin_activate_poll.html:6
 msgid "activate"
 msgstr ""
 
-#: templates/admin_activate_poll.html:22 templates/admin_new_poll.html:25
+#: templates/admin_activate_poll.html:10 templates/admin_new_poll.html:13
 msgid "Label"
 msgstr ""
 
-#: templates/admin_activate_poll.html:24
+#: templates/admin_activate_poll.html:12
 msgid "Tokens"
 msgstr ""
 
-#: templates/admin_message.html:19
+#: templates/admin_message.html:10
 msgid "Poll created"
 msgstr ""
 
-#: templates/admin_message.html:20
+#: templates/admin_message.html:11
 msgid "Link to poll"
 msgstr ""
 
-#: templates/admin_message.html:23
+#: templates/admin_message.html:14
 msgid "Poll activated"
 msgstr ""
 
-#: templates/admin_message.html:25
+#: templates/admin_message.html:16
 msgid "Poll closed"
 msgstr ""
 
-#: templates/admin_message.html:27
+#: templates/admin_message.html:18
 msgid "Poll not prepared"
 msgstr ""
 
-#: templates/admin_message.html:29
+#: templates/admin_message.html:20
 msgid "Poll could not be activated"
 msgstr ""
 
-#: templates/admin_message.html:31 templates/message.html:27
+#: templates/admin_message.html:22 templates/message.html:16
 msgid "unknown reason"
 msgstr ""
 
-#: templates/admin_new_poll.html:18
+#: templates/admin_new_poll.html:6
 msgid "create"
 msgstr ""
 
-#: templates/admin_new_poll.html:30
+#: templates/admin_new_poll.html:18
 msgid "Type"
 msgstr ""
 
-#: templates/admin_new_poll.html:40 templates/index.html:19
+#: templates/admin_new_poll.html:28 templates/index.html:5
 msgid "Number of votes"
 msgstr ""
 
-#: templates/admin_new_poll.html:44
+#: templates/admin_new_poll.html:32
 msgid "Answer Options"
 msgstr ""
 
-#: templates/admin_overview.html:18
+#: templates/admin_overview.html:6
 msgid "Overview"
 msgstr ""
 
-#: templates/admin_overview.html:21 templates/admin_overview.html:22
+#: templates/admin_overview.html:9 templates/admin_overview.html:10
 msgid "New poll"
 msgstr ""
 
-#: templates/admin_overview.html:24
+#: templates/admin_overview.html:12
 msgid "Prepared polls"
 msgstr ""
 
-#: templates/admin_overview.html:30
+#: templates/admin_overview.html:18
 msgid "Activate Poll"
 msgstr ""
 
-#: templates/admin_overview.html:35
+#: templates/admin_overview.html:23
 msgid "Active polls"
 msgstr ""
 
-#: templates/admin_overview.html:43
+#: templates/admin_overview.html:31
 msgid "Close Poll"
 msgstr ""
 
-#: templates/admin_overview.html:48
+#: templates/admin_overview.html:36
 msgid "Closed polls"
 msgstr ""
 
-#: templates/index.html:17
+#: templates/index.html:3
 msgid "Ballot Box"
 msgstr ""
 
-#: templates/index.html:18 templates/poll_results.html:15
+#: templates/index.html:4 templates/poll_results.html:3
 msgid "Poll"
 msgstr ""
 
-#: templates/index.html:23 templates/poll_results.html:31
+#: templates/index.html:9 templates/poll_results.html:19
 msgid "Token"
 msgstr ""
 
-#: templates/message.html:15 templates/message.html:17
-#: templates/message.html:19 templates/message.html:23
-#: templates/message.html:25
+#: templates/message.html:4 templates/message.html:6 templates/message.html:8
+#: templates/message.html:12 templates/message.html:14
 msgid "Error"
 msgstr ""
 
-#: templates/message.html:15
+#: templates/message.html:4
 msgid "URL incomplete"
 msgstr ""
 
-#: templates/message.html:17
+#: templates/message.html:6
 msgid "Voting is not active"
 msgstr ""
 
-#: templates/message.html:19
+#: templates/message.html:8
 msgid "Token is invalid"
 msgstr ""
 
-#: templates/message.html:21
+#: templates/message.html:10
 msgid "Vote was registered"
 msgstr ""
 
-#: templates/message.html:23
+#: templates/message.html:12
 msgid "Too many ticks. Vote was not registered"
 msgstr ""
 
-#: templates/message.html:25
+#: templates/message.html:14
 msgid "Invalid combination of ticks"
 msgstr ""
 
-#: templates/poll_results.html:16
+#: templates/poll_results.html:4
 msgid "Summarized results"
 msgstr ""
 
-#: templates/poll_results.html:18
+#: templates/poll_results.html:6
 msgid "Number of Votes"
 msgstr ""
 
-#: templates/poll_results.html:18
+#: templates/poll_results.html:6
 msgid "Option"
 msgstr ""
 
-#: templates/poll_results.html:25
+#: templates/poll_results.html:13
 msgid "Unsubmitted ballots"
 msgstr ""
 
-#: templates/poll_results.html:29
+#: templates/poll_results.html:17
 msgid "Individual votes"
 msgstr ""
 
-#: templates/poll_results.html:50
+#: templates/poll_results.html:38
 msgid "Registered Participants"
 msgstr ""
 

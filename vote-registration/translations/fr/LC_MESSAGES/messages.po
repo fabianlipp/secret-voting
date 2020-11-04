@@ -1,140 +1,140 @@
-# Translations template for PROJECT.
+# French translations for commit.
 # Copyright (C) 2020 ORGANIZATION
-# This file is distributed under the same license as the PROJECT project.
+# This file is distributed under the same license as the commit project.
 # Maximilian Kroth <git@tmaex.de>, 2020.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: commit d091a53\n"
+"Project-Id-Version: commit a23b348\n"
 "Report-Msgid-Bugs-To: git@tmaex.de\n"
-"POT-Creation-Date: 2020-10-22 08:36+0200\n"
+"POT-Creation-Date: 2020-10-27 01:46+0100\n"
 "PO-Revision-Date: 2020-10-26 19:36+0100\n"
-"Language-Team: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.8.0\n"
-"X-Generator: Poedit 2.4.1\n"
 "Last-Translator: \n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Language: fr\n"
+"Language-Team: \n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.6.0\n"
 
-#: templates/admin.html:17 templates/admin.html:22
+#: templates/admin.html:8 templates/admin.html:10
 msgid "Admin Vote Registration"
 msgstr "Inscription au vote de l’administrateur"
 
-#: templates/admin.html:24 templates/index.html:23 templates/presenter.html:24
+#: templates/admin.html:12 templates/index.html:11 templates/presenter.html:12
 msgid "Warning"
 msgstr "Avertissement"
 
-#: templates/admin.html:24 templates/index.html:23 templates/presenter.html:24
+#: templates/admin.html:12 templates/index.html:11 templates/presenter.html:12
 msgid "Local mode active"
 msgstr "Mode local actif"
 
-#: templates/admin.html:28
+#: templates/admin.html:16
 msgid "Voting Administration"
 msgstr "Administration du vote"
 
-#: templates/admin.html:32
+#: templates/admin.html:20
 msgid "Voting title"
 msgstr "Titre de vote"
 
-#: templates/admin.html:38
+#: templates/admin.html:26
 msgid "Voting link"
 msgstr "Lien de vote"
 
-#: templates/admin.html:47
+#: templates/admin.html:35
 msgid "End and generate tokens"
 msgstr "Terminer et générer des jetons"
 
-#: templates/admin.html:59
+#: templates/admin.html:47
 msgid "Tokens"
 msgstr "Jetons"
 
-#: templates/admin.html:61
+#: templates/admin.html:49
 msgid "Names"
 msgstr "Noms"
 
-#: templates/admin.html:63 templates/index.html:52 templates/presenter.html:28
+#: templates/admin.html:51 templates/index.html:40 templates/presenter.html:16
 msgid "Registered Users"
 msgstr "Utilisateurs enregistrés"
 
-#: templates/index.html:16 templates/index.html:21
+#: templates/index.html:7 templates/index.html:9
 msgid "Vote Registration"
 msgstr "Inscription au vote"
 
-#: templates/index.html:27
+#: templates/index.html:15
 msgid "Voting"
 msgstr "Vote"
 
-#: templates/index.html:31
+#: templates/index.html:19
 msgid "Your name"
 msgstr "Votre nom"
 
-#: templates/index.html:37
+#: templates/index.html:25
 msgid "Register for voting"
 msgstr "Inscrivez-vous pour voter"
 
-#: templates/index.html:41
+#: templates/index.html:29
 msgid "Your token"
 msgstr "Votre jeton"
 
-#: templates/index.html:43
+#: templates/index.html:32
 msgid "Not generated yet"
 msgstr "Pas encore généré"
 
-#: templates/local.html:11 templates/local.html:17
+#: templates/local.html:2 templates/local.html:5
 msgid "Local Mode"
 msgstr "Local Mode"
 
-#: templates/local.html:22
+#: templates/local.html:9
 msgid "Fullname"
 msgstr "Nom complet"
 
-#: templates/local.html:23
+#: templates/local.html:10
 msgid "UserID"
 msgstr "Identifiant d'utilisateur"
 
-#: templates/local.html:26
+#: templates/local.html:13
 msgid "is voting"
 msgstr "est électeur"
 
-#: templates/local.html:30
+#: templates/local.html:17
 msgid "is admin"
 msgstr "est admin"
 
-#: templates/local.html:34
+#: templates/local.html:21
 msgid "is presenter"
 msgstr "est présentateur"
 
-#: templates/local.html:37
+#: templates/local.html:24
 msgid "Join with this user"
 msgstr "Joignez-vous à cet utilisateur"
 
-#: templates/message.html:14
+#: templates/message.html:3
 msgid "Error"
 msgstr "Erreur"
 
-#: templates/message.html:16
+#: templates/message.html:5
 msgid "SAML Login invalid"
 msgstr "SAML Login non valide"
 
-#: templates/message.html:18
+#: templates/message.html:7
 msgid "No voting permissions"
 msgstr "Pas d’autorisations de vote"
 
-#: templates/message.html:20
+#: templates/message.html:9
 msgid "No admin permissions"
 msgstr "Les droits d'accès à l'administration font défaut"
 
-#: templates/message.html:22
+#: templates/message.html:11
 msgid "No presenter permissions"
 msgstr "Es droits de presentation font défaut"
 
-#: templates/message.html:24
+#: templates/message.html:13
 msgid "unknown reason"
 msgstr "raison inconnue"
 
-#: templates/presenter.html:17 templates/presenter.html:22
+#: templates/presenter.html:8 templates/presenter.html:10
 msgid "Presenter Vote Registration"
 msgstr "Inscription au vote des présentateurs"
+
