@@ -4,7 +4,7 @@ Flask-Session==0.3.2
 Flask_SocketIO==4.3.0
 Flask-Babel==2.0.0
 itsdangerous==1.1.0
-Jinja2==2.11.2
+Jinja2==2.11.3
 MarkupSafe==1.1.1
 python-engineio==3.13.0
 python-socketio==4.6.0
