@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
     // Use a "/test" namespace.
     namespace = '/test';
 
@@ -10,20 +10,20 @@ $(document).ready(function() {
         socket = io(namespace, {query: "token=" + secret_voting_token});
     }
 
-    socket.on('register_broadcast', function(msg) {
+    socket.on('register_broadcast', function (msg) {
         updateListOfUsers(msg.registered_fullnames)
     });
 
-    socket.on('register_response', function(msg) {
+    socket.on('register_response', function (msg) {
         if (msg.successful) {
-            $('#register_success').html("You registered successfully. <b>Do not close the window or reload!</b>");
+            $('#register_success').html(_("You registered successfully. <b>Do not close the window or reload!</b>"));
             setControlState(true);
         } else {
-            $('#register_success').html("Could not register.");
+            $('#register_success').html(_("Could not register."));
         }
     });
 
-    socket.on('reset_broadcast', function(msg) {
+    socket.on('reset_broadcast', function (msg) {
         updateListOfUsers([])
         $("#register_success").html('');
         $("#your_token").val('');
@@ -34,24 +34,28 @@ $(document).ready(function() {
         setControlState(false);
     });
 
-    socket.on('voting_end_broadcast', function(msg) {
+    socket.on('voting_end_broadcast', function (msg) {
         setControlState(true);
         setState(false);
     });
 
     socket.on('generated_token', function (msg) {
         let yourToken = $('#your_token');
-	    yourToken.val(msg.token);
+        yourToken.val(msg.token);
 
         let votingLink = $('#voting_link');
-        votingLink.html('Copy token and open ballot box: <a href="'+msg.voting_link+'" target="_blank">'+msg.voting_link+'</a>');
-	
-	    let copyBtn = $('#copy_btn');
-	    copyBtn.click(function () {
+        votingLink.html(
+            _("Copy token and open ballot box:")
+            + ' <a href="' + msg.voting_link + '" target="_blank">'
+            + msg.voting_link + '</a>'
+        );
+
+        let copyBtn = $('#copy_btn');
+        copyBtn.click(function () {
             yourToken.select();
-            if (typeof yourToken.setSelectionRange === "function") yourToken.setSelectionRange(0,9999);
+            if (typeof yourToken.setSelectionRange === "function") yourToken.setSelectionRange(0, 9999);
             document.execCommand('copy');
-	    });
+        });
         copyBtn.prop("disabled", false);
 
         $('#register_btn').prop("disabled", true);
@@ -97,31 +101,31 @@ $(document).ready(function() {
         };
         let allTokens = $("#admin_output_json");
         allTokens.val(JSON.stringify(json_output));
-	    
+
         let copyBtn = $('#copy_btn');
-	    copyBtn.click(function () {
+        copyBtn.click(function () {
             allTokens.select();
-            if (typeof allTokens.setSelectionRange === "function") allTokens.setSelectionRange(0,9999);
+            if (typeof allTokens.setSelectionRange === "function") allTokens.setSelectionRange(0, 9999);
             document.execCommand('copy');
-	    });
+        });
         copyBtn.prop("disabled", false);
     });
 
     // User controls
-    $('form#voting_register').submit(function(event) {
+    $('form#voting_register').submit(function (event) {
         socket.emit('voting_register', {});
         return false;
     });
 
     // Admin controls
-    $('form#voting_start').submit(function(event) {
+    $('form#voting_start').submit(function (event) {
         socket.emit('admin_voting_start', {
             'voting_title': $("input#voting_title").val(),
             'voting_link': $("input#voting_link").val()
         });
         return false;
     });
-    $('form#voting_end').submit(function(event) {
+    $('form#voting_end').submit(function (event) {
         socket.emit('admin_voting_end', {});
         return false;
     });
@@ -129,9 +133,9 @@ $(document).ready(function() {
 
 function setState(registrationActive) {
     if (registrationActive) {
-        $('#state').html("Registration is active")
+        $('#state').html(_("Registration is active"))
     } else {
-        $('#state').html("Registration is inactive")
+        $('#state').html(_("Registration is inactive"))
     }
 }
 
